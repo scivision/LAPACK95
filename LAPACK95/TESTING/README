@@ -1,0 +1,70 @@
+!
+!  -- LAPACK95 Makefile (version 2.1) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August, 2000
+!
+! --------------  LAPACK95/TESTING directory  -----------------------
+
+   The directory contains testing files for all the routines, included
+in the library (currently all the driver routines from LAPACK are
+implemented) and for all four data types. The names follow the convention:
+               la_test_<precision><routine_name>
+The testing is modified LAPACK testing. To make the executable test files
+you need to run the make command, followed by the name of the executable,
+that you need, for example: 
+                make linsingle
+    or 
+                make eigdcomplex
+If you need all the executables you can do simply
+                make all
+The executables are separated in two groups - one for testing the linear
+equation routines (linsingle, lindouble, lincomplex, lindcomplex) and
+another for testing the eigenvalue problem routines (eigsingle, eigdouble,
+eigcomplex, eigdcomplex).
+
+   The make.inc file at the LAPACK95 directory should be adjusted for
+the particular environment. Note, that LAPACK95 testing needs library
+testlib.a which contains all the testing routines from LAPACK. To produce
+this library you need to have access to LAPACK/TESTING directory.
+The variable LAPACK_PATH in the make.inc file should give the LAPACK 
+directory path. For example, if the LAPACK directory is /usr/local/lib/LAPACK3/
+the make.inc should include the following line:
+
+LAPACK_PATH = /usr/local/lib/LAPACK3
+
+   To start a test you should supply an input file. There is a directory,
+called INFILES, containing all the input files, that you might need to run
+the testings. They are the same files, that LAPACK uses to run LAPACK
+testings. In the next few lines there is a short description of the target 
+for these input files.
+   There are four groups of files : 
+     = for single real version of the testings. They usually start with
+letter "s", excluding glm.in, gsv.in, lse.in.
+   sed.in - (input file for eigsingle) - runs error and computational tests
+for  SGEES, SGEEV, SGEESX, SGEEVX
+   sgd.in - (eigsingle) - SGGES, SGGEV, SGGESX, SGGEVX
+   sgg.in - (eigsingle) - SGEGS, SGEGV
+   ssb.in - (eigsingle) - SSBEV, SSBEVD, SSBEVX
+   ssg.in - (eigsingle) - SSYGV, SSYGVD, SSYGVX, SSPGV, SSPGVD, SSPGVX,
+                          SSBGV, SSBGVD, SSBGVX
+   svd.in- (eigsingle)  - SGESVD, SGESDD
+   stest.in - (single)  - SGETRF, SGETRI, SGETRS, SGERFS, SGECON, SGESV,
+SGESVX, SGEEQU, SGBSV, SGBSVX, SGTSV, SGTSVX, SPOSV, SPOSVX, SPPSV, SPPSVX,
+SPBSV, SPBSVX, SPTSV, SPTSVX, SSYSV, SSYSVX, SSPSV, SSPSVX, SGELS, SGELSS,
+SGELSX, SGELSY, SGELSD
+   glm.in - (eigsingle) - SGGGLM
+   gsv.in - (eigsingle) - SGGSVD
+   lse.in - (eigsingle) - SGGLSE
+   sep.in - (eigsingle) - SSTEV, SSTEVD, SSTEVX, SSTEVR, SSYEV, SSYEVD,
+SSYEVX, SSYEVR, SSPEV, SSPEVD, SSPEVX, SSBEV, SSBEVD, SSBEVX
+   
+      = starting with "c" - for single complex version
+      = starting with "d" - for double real version
+      = starting with "z" - for double complex version
+   The input files  glm.in, gsv.in, lse.in and sep.in are common for all 
+four data types.  
+   
+   An example of running a testing routine is:
+   
+   ./eigcomplex < INFILES/cgg.in 
+   

@@ -1,0 +1,233 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT syev
+ @type sreal dreal scplx dcplx
+PROGRAM LA_@(pre)SYEV_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HEEV_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+ @type sreal dreal scplx dcplx
+   USE F90_LAPACK, ONLY: LA_SYEV
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HEEV
+ @type !
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type sherm dherm scplx dcplx
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN = 5, NOUT = 6
+!  .. Local Scalars ..
+   INTEGER :: I, J, INFO, N 
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:,:), W(:)
+   @(type)(WP), ALLOCATABLE :: A(:,:)
+!  .. Executable Statements ..
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) '@(pre)SYEV ET_Example Program Results.'
+ @type sherm dherm
+   WRITE(NOUT,*) '@(pre)HEEV ET_Example Program Results.'
+ @type !
+   READ(NIN,*) ! Skip heading in data file
+   READ(NIN,*) N
+   ALLOCATE ( A(N,N), AA(N,N), W(N) )
+      DO I = 1, N
+        READ(NIN,*) (AA(I, J), J = 1, N)
+      ENDDO
+   A=AA
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N
+        WRITE(NOUT,FMT) A(I,:)
+      ENDDO
+!
+   WRITE(NOUT,*) '---------------------------------------------------------'
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)SYEV LAPACK Subroutine Results.'
+   WRITE(NOUT,*)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SYEV(A, W, INFO=INFO)'
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,INFO=INFO)
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'INFO = ',INFO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_SYEV(A, W, 'V')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,'V')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_SYEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_SYEV(A, W, 'V', 'L')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (lower triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,'V','L')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_SYEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_SYEV(A, W, UPLO='L')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (lower triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,UPLO='L')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SYEV(A, W, INFO=INFO)'
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,INFO=INFO)
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'INFO = ',INFO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_SYEV(A, W, 'V' )"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_SYEV(A,W,'V')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_SYEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_SYEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+END PROGRAM LA_@(pre)SYEV_ET_EXAMPLE
+ @type sherm dherm
+   WRITE ( NOUT, * )'Details of LA_@(pre)HEEV LAPACK Subroutine Results.'
+   WRITE(NOUT,*)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HEEV(A, W, INFO=INFO)'
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,INFO=INFO)
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'INFO = ',INFO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_HEEV(A, W, 'V')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,'V')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_HEEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_HEEV(A, W, 'V', 'L')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (lower triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,'V','L')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_HEEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_HEEV(A, W, UPLO='L')"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (lower triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,UPLO='L')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HEEV(A, W, INFO=INFO)'
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - destroyed matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,INFO=INFO)
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'INFO = ',INFO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) "CALL LA_HEEV(A, W, 'V' )"
+   WRITE(NOUT,*) 'ON ENTRY: A'
+   WRITE(NOUT,*) '   A - the original matrix (upper triangular)'
+   WRITE(NOUT,*) 'ON EXIT: A, W'
+   WRITE(NOUT,*) '   A - orthonormal eigenvectors of the matrix A'
+   WRITE(NOUT,*) '   W - the eigenvalues in ascending order'
+   A=AA
+   CALL LA_HEEV(A,W,'V')
+   WRITE(NOUT,*) 'The eigenvalues computed by LA_HEEV:'
+   WRITE(NOUT,FMT) W(:)
+   WRITE(NOUT,*) 'The orthonormal eigenvectors computed by LA_HEEV:'
+   DO I = 1, N
+      WRITE(NOUT,FMT) A(I,:)
+   END DO
+! 
+END PROGRAM LA_@(pre)HEEV_ET_EXAMPLE
+ @type !

@@ -1,0 +1,395 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT sbevx
+ @type sreal dreal scplx dcplx
+PROGRAM LA_@(pre)SBEVX_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HBEVX_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+ @type sreal dreal scplx dcplx
+   USE F90_LAPACK, ONLY: LA_SBEVX
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HBEVX
+ @type !
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, J, INFO, N, KD, M
+!  .. Local Arrays ..
+   INTEGER, ALLOCATABLE :: IFAIL(:)
+   REAL(WP), ALLOCATABLE :: AA(:,:), W(:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), Z(:,:), Q(:,:)
+!  .. Executable Statements ..
+ @type sreal dreal scplx dcplx
+   WRITE (NOUT,*) '@(pre)SBEVX ET_Example Program Results.'
+ @type sherm dherm
+   WRITE (NOUT,*) '@(pre)HBEVX ET_Example Program Results.'
+ @type !
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N, KD
+   PRINT *, 'N = ', N, ' KD = ', KD
+   ALLOCATE ( A(KD+1,N), AA(KD+1,N), W(N), Z(N,N), IFAIL(N), Q(N,N) )
+!
+   AA = HUGE(1.0_WP)
+   DO I = 1, KD+1
+      READ (NIN, *) (AA(I, J), J = KD-I+2, N)
+   ENDDO
+   A=AA
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, KD+1
+      WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,1:N)
+   ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+ @type sreal dreal scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)SBEVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, INFO=INFO )'
+   A=AA
+   CALL LA_SBEVX( A, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Z=Z, INFO=INFO )'
+   A=AA
+   CALL LA_SBEVX( A, W, Z=Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, ''U'', Z )'
+   A=AA
+   CALL LA_SBEVX( A, W, 'U', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, ''L'', Z )'
+   A = HUGE(1.0_WP)
+   WRITE(NOUT,*) 'The transpose matrix of A:'
+   DO I = 1, KD+1
+      A(I,1:N-I+1) = AA(KD+2-I,I:N)
+      WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,1:N)
+   ENDDO
+   CALL LA_SBEVX( A, W, 'L', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )'
+   A=AA
+   CALL LA_SBEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,*) 'The total number of eigenvalues found is ', M
+   WRITE(NOUT,FMT) W(1:M)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, ''U'', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &'
+   WRITE(NOUT,*) ' M=M, IFAIL=IFAIL, Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, 'U', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &
+                  M=M, IFAIL=IFAIL, Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+   WRITE(NOUT,*) 'Matrix Q:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Q(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, ''U'', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &'
+   WRITE(NOUT,*) '         Q=Q, ABSTOL= 2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, 'U', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &
+                  Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+   WRITE(NOUT,*) 'Matrix Q:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Q(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A(:,1:N-1), W, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A(:,1:N-1), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, UPLO=''9'', INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, UPLO='9', INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, IL=-1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, IL=-1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, IL=N, IU=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, IL=N, IU=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, IL=1, IU=N+1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, IL=1, IU=N+1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, IFAIL=IFAIL, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, IFAIL=IFAIL, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Q=Q(:,1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, Q=Q(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Q=Q(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, Q=Q(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBEVX( A, W, Q=Q )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SBEVX( A, W, Q=Q )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END!PROGRAM LA_@(pre)SBEVX_ET_EXAMPLE
+ @type sherm dherm
+   WRITE ( NOUT, * )'Details of LA_@(pre)HBEVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, INFO=INFO )'
+   A=AA
+   CALL LA_HBEVX( A, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Z=Z, INFO=INFO )'
+   A=AA
+   CALL LA_HBEVX( A, W, Z=Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, ''U'', Z )'
+   A=AA
+   CALL LA_HBEVX( A, W, 'U', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, ''L'', Z )'
+   A = HUGE(1.0_WP)
+   WRITE(NOUT,*) 'The transpose matrix of A:'
+   DO I = 1, KD+1
+      A(I,1:N-I+1) = AA(KD+2-I,I:N)
+      WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,1:N)
+   ENDDO
+   CALL LA_HBEVX( A, W, 'L', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )'
+   A=AA
+   CALL LA_HBEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,*) 'The total number of eigenvalues found is ', M
+   WRITE(NOUT,FMT) W(1:M)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, ''U'', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &'
+   WRITE(NOUT,*) ' M=M, IFAIL=IFAIL, Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, 'U', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &
+                  M=M, IFAIL=IFAIL, Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+   WRITE(NOUT,*) 'Matrix Q:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Q(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, ''U'', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &'
+   WRITE(NOUT,*) '         Q=Q, ABSTOL= 2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, 'U', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &
+                  Q=Q, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+   WRITE(NOUT,*) 'Matrix Q:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Q(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A(:,1:N-1), W, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A(:,1:N-1), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, UPLO=''9'', INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, UPLO='9', INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, IL=-1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, IL=-1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, IL=N, IU=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, IL=N, IU=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, IL=1, IU=N+1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, IL=1, IU=N+1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, IFAIL=IFAIL, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, IFAIL=IFAIL, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Q=Q(:,1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, Q=Q(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Q=Q(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, Q=Q(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBEVX( A, W, Q=Q )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HBEVX( A, W, Q=Q )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END!PROGRAM LA_@(pre)HBEVX_ET_EXAMPLE
+ @type !

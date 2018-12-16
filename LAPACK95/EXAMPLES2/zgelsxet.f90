@@ -1,0 +1,133 @@
+PROGRAM LA_ZGELSX_EXAMPLE
+!
+!  -- LAPACK95 interface driver routine (version 3.0) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     September, 2000
+!
+!  .. USE STATEMENTS
+   USE LA_PRECISION, ONLY: WP => DP
+   USE F95_LAPACK, ONLY: LA_GELSX, LA_GETRF
+!  .. IMPLICIT STATEMENT ..
+   IMPLICIT NONE
+!  .. PARAMETERS ..
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.2,1H,,F7.2,1H):))'
+   CHARACTER(LEN=*), PARAMETER :: FMTI = '(10(1X,I4))'
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. LOCAL SCALARS ..
+   INTEGER  :: I, INFO, M, N, J, NRHS, RANK
+   REAL(WP) :: RCOND
+!  .. LOCAL ARRAYS ..
+   INTEGER, ALLOCATABLE :: IPIV(:), JPVT(:)
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:)
+   COMPLEX(WP), ALLOCATABLE :: A(:, :), B(:,:)
+!  .. INTRINSIC FUNCTIONS ..
+   INTRINSIC MIN, MAX
+!  .. EXECUTABLE STATEMENTS ..
+   WRITE (NOUT,*) 'ZGELSX Example Program Results'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) M, N, NRHS
+   PRINT *, 'M = ', M, ' N = ', N, ' NRHS = ', NRHS
+   ALLOCATE ( A(M,N), AA(M,N), B(MAX(1,M,N),NRHS), BB(MAX(1,M,N),NRHS), &
+              IPIV(MIN(M,N)), JPVT(N) )
+   DO I = 1, M; READ (NIN,*) AA(I,:); ENDDO
+   DO J = 1, NRHS; BB(:,J) = SUM( AA, DIM=2)*J; ENDDO
+   A = AA; B=BB
+   WRITE(NOUT,*) 'The matrix A'
+   DO I = 1, M; WRITE (NOUT,FMT) AA(I,:); ENDDO
+   WRITE(NOUT,*) 'The RHS matrix B:'
+   DO J = 1, NRHS; WRITE (NOUT,FMT) BB(:,J); ENDDO
+!
+   WRITE ( NOUT, * )'--------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_ZGELSX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B, RANK, JPVT, RCOND, INFO)'
+   A = AA; CALL LA_GETRF( A(1:MIN(M,N),1:MIN(M,N)), IPIV, RCOND )
+   A = AA; B=BB; JPVT = 0
+   CALL LA_GELSX (A, B, RANK, JPVT, RCOND, INFO)
+   WRITE(NOUT,*)'RANK, RCOND, INFO ', RANK, RCOND, INFO
+   WRITE(NOUT,*) 'B & JPVT'
+   DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+   WRITE(NOUT,FMTI) JPVT(:)
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(:,1), RANK, JPVT, RCOND, INFO)'
+   A = AA; B=BB; RCOND = 0.0_WP; JPVT = 0; JPVT(4) = 1
+   CALL LA_GELSX (A, B(:,1), RANK, JPVT, RCOND, INFO)
+   WRITE(NOUT,*)'RANK, RCOND, INFO ', RANK, RCOND, INFO
+   WRITE(NOUT,*) 'B & JPVT'
+   WRITE (NOUT,FMT) B(:,1)
+   WRITE(NOUT,FMTI) JPVT(:)
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B, INFO=INFO)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B, INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ', B'
+   DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(:,1), INFO=INFO)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B(:,1), INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ', B(:,1)'
+   WRITE(NOUT,FMT) B(:,1)
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B, RANK, INFO=INFO)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B, RANK, INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ' RANK = ', RANK, ', B'
+   DO J = 1, NRHS; WRITE(NOUT,FMT) B(:,J); ENDDO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(:,1), RANK, JPVT, INFO=INFO)'
+   A = AA; B=BB; JPVT = 0; JPVT(1) = 1
+   CALL LA_GELSX (A, B(:,1), RANK, JPVT, INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ' RANK = ', RANK, ', B(:,1) & JPVT'
+   WRITE(NOUT,FMT) B(:,1)
+   WRITE(NOUT,FMTI) JPVT(:)
+!
+   WRITE (NOUT,*)
+   A = AA; CALL LA_GETRF( A(1:MIN(M,N),1:MIN(M,N)), IPIV, RCOND )
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B, RCOND = RCOND, INFO=INFO)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B, RCOND=RCOND, INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ' RCOND = ', RCOND, ', B'
+   DO J = 1, NRHS; WRITE(NOUT,FMT) B(:,J); ENDDO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(:,1), JPVT=JPVT(1:MAX(M,N)+1), INFO=INFO)'
+   A = AA; B=BB; JPVT = 0
+   CALL LA_GELSX (A, B(:,1), JPVT=JPVT(1:MAX(M,N)+1), INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B)
+   WRITE(NOUT,*)'B'
+   DO J = 1, NRHS; WRITE(NOUT,FMT) B(:,J); ENDDO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(:,1))'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B(:,1))
+   WRITE(NOUT,*)'B(:,1)'
+   WRITE(NOUT,FMT) B(:,1)
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A, B(MIN(M,N),:), INFO=INFO)'
+   A = AA; B=BB;
+   CALL LA_GELSX (A, B(MIN(M,N),:), INFO=INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GELSX (A(1:N-1,:), B(:,1))'
+   A = AA; B=BB;
+   CALL LA_GELSX (A(1:N-1,:), B(:,1))
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+END!PROGRAM LA_ZGELSX_EXAMPLE

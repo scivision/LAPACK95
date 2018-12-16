@@ -1,0 +1,32 @@
+!
+!  -- LAPACK95 interface driver routine (version 1.0) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August 8, 2000
+!
+! --------------  LAPACK90/EXAMPLE1 directory  ---------------------
+
+  This directory contains Fortran95 programs by which where obtained
+the results in the LAPACK95 Users' Guide. There are here: 1) the
+example fortran main programs with the same name as in the LAPACK95
+Users' Guide, but in lower case letters, 2) the input data for the
+example programs if necessary (the input data are automaticaly read
+by the example program), 3) the makefile by each an exacutable program
+can be generated and 4) this README file.
+
+  Before running the example programs one must
+     1. generate the LAPACK95 library, go to SRC directory (README file)
+     2. verify the statements "FC90", "FFLAGS" and "LIBS" in the makefile.
+     3. verify one example program:
+          
+                   make la_gesv_example
+
+This statement will compile the example fortran program
+                  la_gesv_example.f90
+link with the necessary libraries, and generate the executable program
+                  la_gesv_example
+One has to run this iexecutable program
+
+                   ./la_gesv_example                  
+
+  If the results are much the LAPACK95 Users' Gude results one can run more
+examples.

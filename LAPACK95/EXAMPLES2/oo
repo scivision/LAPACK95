@@ -1,0 +1,232 @@
+'rm' -f zgbsvet; 'rm' -f zgbsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgbsvet -I./../lapack95_modules zgbsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgbsvet < zgbsvet.dat > zgbsvet.res; 'rm' -f zgbsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zgbsvxet; 'rm' -f zgbsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgbsvxet -I./../lapack95_modules zgbsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgbsvxet < zgbsvxet.dat > zgbsvxet.res; 'rm' -f zgbsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgeeset; 'rm' -f zgeeset.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgeeset -I./../lapack95_modules zgeeset.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgeeset < zgeeset.dat > zgeeset.res; 'rm' -f zgeeset
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgeesxet; 'rm' -f zgeesxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgeesxet -I./../lapack95_modules zgeesxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgeesxet < zgeesxet.dat > zgeesxet.res; 'rm' -f zgeesxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgeevet; 'rm' -f zgeevet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgeevet -I./../lapack95_modules zgeevet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgeevet < zgeevet.dat > zgeevet.res; 'rm' -f zgeevet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgeevxet; 'rm' -f zgeevxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgeevxet -I./../lapack95_modules zgeevxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgeevxet < zgeevxet.dat > zgeevxet.res; 'rm' -f zgeevxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgegset; 'rm' -f zgegset.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgegset -I./../lapack95_modules zgegset.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgegset < zgegset.dat > zgegset.res; 'rm' -f zgegset
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgegvet; 'rm' -f zgegvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgegvet -I./../lapack95_modules zgegvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgegvet < zgegvet.dat > zgegvet.res; 'rm' -f zgegvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgelset; 'rm' -f zgelset.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgelset -I./../lapack95_modules zgelset.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgelset < zgelset.dat > zgelset.res; 'rm' -f zgelset
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgelsset; 'rm' -f zgelsset.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgelsset -I./../lapack95_modules zgelsset.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgelsset < zgelsset.dat > zgelsset.res; 'rm' -f zgelsset
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgelsxet; 'rm' -f zgelsxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgelsxet -I./../lapack95_modules zgelsxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgelsxet < zgelsxet.dat > zgelsxet.res; 'rm' -f zgelsxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgesvdet; 'rm' -f zgesvdet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgesvdet -I./../lapack95_modules zgesvdet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgesvdet < zgesvdet.dat > zgesvdet.res; 'rm' -f zgesvdet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating invalid operand occurred
+Warning: Floating divide by zero occurred
+Warning: Floating underflow occurred
+'rm' -f zgesvet; 'rm' -f zgesvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgesvet -I./../lapack95_modules zgesvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgesvet < zgesvet.dat > zgesvet.res; 'rm' -f zgesvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zgesvmg; 'rm' -f zgesvmg.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgesvmg -I./../lapack95_modules zgesvmg.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgesvmg < zgesvmg.dat > zgesvmg.res; 'rm' -f zgesvmg
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Cannot open "zgesvmg.f90"
+/bin/sh: zgesvmg: command not found
+'rm' -f zgesvxet; 'rm' -f zgesvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgesvxet -I./../lapack95_modules zgesvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgesvxet < zgesvxet.dat > zgesvxet.res; 'rm' -f zgesvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zggglmet; 'rm' -f zggglmet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zggglmet -I./../lapack95_modules zggglmet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zggglmet < zggglmet.dat > zggglmet.res; 'rm' -f zggglmet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgglseet; 'rm' -f zgglseet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgglseet -I./../lapack95_modules zgglseet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgglseet < zgglseet.dat > zgglseet.res; 'rm' -f zgglseet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zggsvdet; 'rm' -f zggsvdet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zggsvdet -I./../lapack95_modules zggsvdet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zggsvdet < zggsvdet.dat > zggsvdet.res; 'rm' -f zggsvdet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zgtsvet; 'rm' -f zgtsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgtsvet -I./../lapack95_modules zgtsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgtsvet < zgtsvet.dat > zgtsvet.res; 'rm' -f zgtsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zgtsvxet; 'rm' -f zgtsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zgtsvxet -I./../lapack95_modules zgtsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zgtsvxet < zgtsvxet.dat > zgtsvxet.res; 'rm' -f zgtsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhbevdet; 'rm' -f zhbevdet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhbevdet -I./../lapack95_modules zhbevdet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhbevdet < zhbevdet.dat > zhbevdet.res; 'rm' -f zhbevdet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhbevet; 'rm' -f zhbevet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhbevet -I./../lapack95_modules zhbevet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhbevet < zhbevet.dat > zhbevet.res; 'rm' -f zhbevet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhbevxet; 'rm' -f zhbevxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhbevxet -I./../lapack95_modules zhbevxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhbevxet < zhbevxet.dat > zhbevxet.res; 'rm' -f zhbevxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhbgvet; 'rm' -f zhbgvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhbgvet -I./../lapack95_modules zhbgvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhbgvet < zhbgvet.dat > zhbgvet.res; 'rm' -f zhbgvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zheevdet; 'rm' -f zheevdet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zheevdet -I./../lapack95_modules zheevdet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zheevdet < zheevdet.dat > zheevdet.res; 'rm' -f zheevdet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zheevet; 'rm' -f zheevet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zheevet -I./../lapack95_modules zheevet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zheevet < zheevet.dat > zheevet.res; 'rm' -f zheevet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zheevxet; 'rm' -f zheevxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zheevxet -I./../lapack95_modules zheevxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zheevxet < zheevxet.dat > zheevxet.res; 'rm' -f zheevxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhegvet; 'rm' -f zhegvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhegvet -I./../lapack95_modules zhegvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhegvet < zhegvet.dat > zhegvet.res; 'rm' -f zhegvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhesvet; 'rm' -f zhesvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhesvet -I./../lapack95_modules zhesvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhesvet < zhesvet.dat > zhesvet.res; 'rm' -f zhesvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zhesvxet; 'rm' -f zhesvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhesvxet -I./../lapack95_modules zhesvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhesvxet < zhesvxet.dat > zhesvxet.res; 'rm' -f zhesvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhpevdet; 'rm' -f zhpevdet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpevdet -I./../lapack95_modules zhpevdet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpevdet < zhpevdet.dat > zhpevdet.res; 'rm' -f zhpevdet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhpevet; 'rm' -f zhpevet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpevet -I./../lapack95_modules zhpevet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpevet < zhpevet.dat > zhpevet.res; 'rm' -f zhpevet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhpevxet; 'rm' -f zhpevxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpevxet -I./../lapack95_modules zhpevxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpevxet < zhpevxet.dat > zhpevxet.res; 'rm' -f zhpevxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhpgvet; 'rm' -f zhpgvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpgvet -I./../lapack95_modules zhpgvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpgvet < zhpgvet.dat > zhpgvet.res; 'rm' -f zhpgvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zhpsvet; 'rm' -f zhpsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpsvet -I./../lapack95_modules zhpsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpsvet < zhpsvet.dat > zhpsvet.res; 'rm' -f zhpsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zhpsvxet; 'rm' -f zhpsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zhpsvxet -I./../lapack95_modules zhpsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zhpsvxet < zhpsvxet.dat > zhpsvxet.res; 'rm' -f zhpsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zpbsvet; 'rm' -f zpbsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zpbsvet -I./../lapack95_modules zpbsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zpbsvet < zpbsvet.dat > zpbsvet.res; 'rm' -f zpbsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zpbsvxet; 'rm' -f zpbsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zpbsvxet -I./../lapack95_modules zpbsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zpbsvxet < zpbsvxet.dat > zpbsvxet.res; 'rm' -f zpbsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zposvet; 'rm' -f zposvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zposvet -I./../lapack95_modules zposvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zposvet < zposvet.dat > zposvet.res; 'rm' -f zposvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zposvxet; 'rm' -f zposvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zposvxet -I./../lapack95_modules zposvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zposvxet < zposvxet.dat > zposvxet.res; 'rm' -f zposvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zppsvet; 'rm' -f zppsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zppsvet -I./../lapack95_modules zppsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zppsvet < zppsvet.dat > zppsvet.res; 'rm' -f zppsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zppsvxet; 'rm' -f zppsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zppsvxet -I./../lapack95_modules zppsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zppsvxet < zppsvxet.dat > zppsvxet.res; 'rm' -f zppsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zptsvet; 'rm' -f zptsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zptsvet -I./../lapack95_modules zptsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zptsvet < zptsvet.dat > zptsvet.res; 'rm' -f zptsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zptsvxet; 'rm' -f zptsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zptsvxet -I./../lapack95_modules zptsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zptsvxet < zptsvxet.dat > zptsvxet.res; 'rm' -f zptsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zspsvet; 'rm' -f zspsvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zspsvet -I./../lapack95_modules zspsvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zspsvet < zspsvet.dat > zspsvet.res; 'rm' -f zspsvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zspsvxet; 'rm' -f zspsvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zspsvxet -I./../lapack95_modules zspsvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zspsvxet < zspsvxet.dat > zspsvxet.res; 'rm' -f zspsvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred
+'rm' -f zsysvet; 'rm' -f zsysvet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zsysvet -I./../lapack95_modules zsysvet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zsysvet < zsysvet.dat > zsysvet.res; 'rm' -f zsysvet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+'rm' -f zsysvxet; 'rm' -f zsysvxet.res; f95 -u -V -dcfuns -dusty -ieee=full -o zsysvxet -I./../lapack95_modules zsysvxet.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a; zsysvxet < zsysvxet.dat > zsysvxet.res; 'rm' -f zsysvxet
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Warning: Floating underflow occurred

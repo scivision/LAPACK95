@@ -1,0 +1,259 @@
+@extract -b incpath.inc
+@extract -b @(incd)/typeh.inc type=@(@type)
+@ROUT sysvx
+ @type sreal dreal scplx dcplx
+PROGRAM LA_@(pre)SYSVX_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HESVX_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+ @type sreal dreal scplx dcplx
+   USE F90_LAPACK, ONLY: LA_SYSVX
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HESVX
+ @type !
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, J, INFO, N, NRHS
+!  .. Local Arrays ..
+   REAL(WP) :: RCOND
+   INTEGER, ALLOCATABLE :: IPIV(:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:), X(:,:), AF(:,:)
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:), FERR(:), BERR(:)
+!  .. Executable Statements ..
+ @type sreal dreal scplx dcplx
+   WRITE (NOUT,*) '@(pre)SYSV ET_Example Program Results.'
+ @type sherm dherm
+   WRITE (NOUT,*) '@(pre)HESV ET_Example Program Results.'
+ @type !
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N, NRHS
+   PRINT *, 'N = ', N, ' NRHS = ', NRHS
+   ALLOCATE ( A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS), IPIV(N), X(N,NRHS), AF(N,N), &
+             FERR(NRHS), BERR(NRHS) )
+!
+   AA = HUGE(1.0_WP)
+   DO I = 1, N
+     READ (NIN, *) AA(I,I:N)
+   ENDDO
+   DO J = 1, NRHS
+      DO I = 1, N
+         BB(I,J) = ( SUM( AA(I,I:N) ) + SUM( AA(1:I-1,I) ) )*J
+      ENDDO
+   ENDDO
+   A=AA; B=BB
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, N
+     WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:)
+   ENDDO
+   WRITE(NOUT,*) 'The RHS matrix B:'
+   DO J = 1, NRHS
+     WRITE (NOUT,*) 'RHS', J; WRITE (NOUT,FMT) B(:,J)
+   ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+ @type sreal dreal scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)SYSVX LAPACK Subroutine Results.'
+ @type sherm dherm
+   WRITE ( NOUT, * )'Details of LA_@(pre)HESVX LAPACK Subroutine Results.'
+ @type !
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B, X, AF=AF, IPIV=IPIV, INFO=INFO )'
+   A=AA; B=BB
+   CALL LA_SYSVX( A, B, X, AF=AF, IPIV=IPIV, INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B, X, AF=AF, IPIV=IPIV, INFO=INFO )'
+   A=AA; B=BB
+   CALL LA_HESVX( A, B, X, AF=AF, IPIV=IPIV, INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+   WRITE(NOUT,*) 'Pivots: ', IPIV
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), AF=AF, IPIV=IPIV, INFO=INFO )'
+   A=AA; B=BB
+   CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), AF=AF, IPIV=IPIV, INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B(1:N,1), X(1:N,1), AF=AF, IPIV=IPIV, INFO=INFO )'
+   A=AA; B=BB
+   CALL LA_HESVX( A, B(1:N,1), X(1:N,1), AF=AF, IPIV=IPIV, INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   WRITE (NOUT,FMT) X(:,1)
+   WRITE(NOUT,*) 'Pivots: ', IPIV
+! 
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B, X )'
+   A=AA; B=BB
+   CALL LA_SYSVX( A, B, X )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B, X )'
+   A=AA; B=BB
+   CALL LA_HESVX( A, B, X )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX:'
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A, B(1:N,1), X(1:N,1) )'
+   A=AA; B=BB
+   CALL LA_SYSVX(A, B(1:N,1), X(1:N,1) )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A, B(1:N,1), X(1:N,1) )'
+   A=AA; B=BB
+   CALL LA_HESVX(A, B(1:N,1), X(1:N,1) )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX:'
+ @type !
+   WRITE (NOUT,FMT) X(:,1)
+! 
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A, B, X, IPIV=IPIV)'
+   A=AA; B=BB
+   CALL LA_SYSVX( A, B, X, IPIV=IPIV)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A, B, X, IPIV=IPIV)'
+   A=AA; B=BB
+   CALL LA_HESVX( A, B, X, IPIV=IPIV)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX:'
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+   WRITE(NOUT,*) 'Pivots: ', IPIV
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), IPIV=IPIV )'
+   A=AA; B=BB
+   CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), IPIV=IPIV )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B(1:N,1), X(1:N,1), IPIV=IPIV )'
+   A=AA; B=BB
+   CALL LA_HESVX( A, B(1:N,1), X(1:N,1), IPIV=IPIV )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX:'
+ @type !
+   WRITE (NOUT,FMT) X(1:N,1)
+   WRITE(NOUT,*) 'Pivots: ', IPIV
+! 
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A(4:4,:), B, X, INFO =INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX( A(4:4,:), B, X, INFO=INFO)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A(4:4,:), B, X, INFO =INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX( A(4:4,:), B, X, INFO=INFO)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+ @type !
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B(1:N,1), X(1:N-1,1), INFO=INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX( A, B(1:N,1), X(1:N-1,1), INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B(1:N,1), X(1:N-1,1), INFO=INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX( A, B(1:N,1), X(1:N-1,1), INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   WRITE (NOUT,FMT) X(1:N,1)
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A, B, X, ''L'', INFO =INFO )'
+   A=TRANSPOSE(AA); B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX( A, B, X, 'L', INFO=INFO)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A, B, X, ''L'', INFO =INFO )'
+   A=TRANSPOSE(AA); B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX( A, B, X, 'L', INFO=INFO)
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), FACT=''F'', INFO=INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX( A, B(1:N,1), X(1:N,1), FACT='F', INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX( A, B(1:N,1), X(1:N,1), FACT=''F'', INFO=INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX( A, B(1:N,1), X(1:N,1), FACT='F', INFO=INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   WRITE (NOUT,FMT) X(1:N,1)
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A, B, X, ''U'', AF, IPIV, ''N'', ', &
+                      'FERR, BERR, RCOND, INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX(A, B, X, 'U', AF, IPIV, 'N', FERR, BERR, RCOND, INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A, B, X, ''U'', AF, IPIV, ''N'', ', &
+                      'FERR, BERR, RCOND, INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX(A, B, X, 'U', AF, IPIV, 'N', FERR, BERR, RCOND, INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) X(:,J); END DO
+   WRITE(NOUT,*) 'RCOND = ', RCOND
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSVX(A, B(1:N,1), X(1:N,1), ''U'', AF, IPIV, ''F'', ', &
+                      'FERR, BERR, &'
+   WRITE(NOUT,*) '              RCOND, INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_SYSVX(A, B(1:N,1), X(1:N,1), 'U', AF, IPIV, 'F', &
+                 FERR(1), BERR(1), RCOND, INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_SYSVX, INFO = ', INFO
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESVX(A, B(1:N,1), X(1:N,1), ''U'', AF, IPIV, ''F'', ', &
+                      'FERR, BERR, &'
+   WRITE(NOUT,*) '              RCOND, INFO )'
+   A=AA; B=BB; X=HUGE(1.0_WP)
+   CALL LA_HESVX(A, B(1:N,1), X(1:N,1), 'U', AF, IPIV, 'F', &
+                 FERR(1), BERR(1), RCOND, INFO )
+   WRITE(NOUT,*)'   X - the solution vectors computed by LA_HESVX, INFO = ', INFO
+ @type !
+   WRITE (NOUT,FMT) X(1:N,1)
+   WRITE(NOUT,*) 'RCOND = ', RCOND
+!
+ @type sreal dreal scplx dcplx
+END PROGRAM LA_@(pre)SYSVX_ET_EXAMPLE
+ @type sherm dherm
+END PROGRAM LA_@(pre)heSVX_ET_EXAMPLE
+ @type !

@@ -1,0 +1,287 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT GESV
+      PROGRAM LA_@(pre)GESV_MG_EXAMPLE
+@extract -b @(incd)/header.inc
+!     .. "Use Statements" ..
+      USE LA_PRECISION, ONLY: WP => @(upr)P
+      USE F90_LAPACK, ONLY: LA_GESV, LA_LAGGE, LA_GETRF, LA_LANGE
+!     .. "Implicit Statement" ..
+      IMPLICIT NONE
+!     .. "Parameters" ..
+      INTEGER, PARAMETER :: NSTART = 50, NINCR = 20, NSTOP = 100, &
+               NRHS = 50, NIN = 5, NOUT = 6, NTESTS = 4, &
+                            NETESTS = 9
+      REAL(WP), PARAMETER :: THRESH = 10.0_WP
+!     .. "Local Scalars" ..
+  @declare "      INTEGER :: "
+      J, INFO, ISEED(4), FTESTS, FETESTS, NMATR, FMATR, ISTAT, N
+  @enddeclare
+  @declare "      REAL(WP) :: "
+      COND, ANORM, RCOND, ANORM1, ANORMX, EPS, RATIO
+  @enddeclare
+!     .. "Local Arrays" ..
+      INTEGER, ALLOCATABLE :: IPIV(:)
+  @declare "      @(type)(WP), ALLOCATABLE :: " y n ""
+      A(:,:), AA(:,:), B(:,:), BB(:,:), DUMMY(:,:)
+  @enddeclare
+      REAL(WP), ALLOCATABLE :: D(:)
+!     .. "Executable Statements" ..
+      FTESTS = 0; FETESTS = 0; NMATR = 0; FMATR = 0
+      WRITE(NOUT,*)
+      WRITE (NOUT,*) '@(pre)GESV Test Example Program Results.'
+      WRITE(NOUT,*) 'LA_GESV LAPACK subroutine solves a dense general'
+      WRITE(NOUT,*) 'linear system of equations, Ax = b.'
+      EPS = EPSILON(1.0_WP)
+      WRITE(NOUT,'( 1X, A, F5.2, A, E12.5 )') 'Threshold value of test ratio = ', &
+                 THRESH, ' the machine eps = ', EPS
+!
+      DO N = NSTART, NSTOP, NINCR
+      NMATR = NMATR + 1
+!
+  @declare "      ALLOCATE ( " y n " )"
+      A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS), IPIV(N), D(N), STAT=ISTAT
+  @enddeclare
+      IF( ISTAT /= 0 )THEN
+         WRITE(NOUT,*) 'Program can not allocate more memory, STA = ', ISTAT
+         STOP
+      END IF
+!
+! Generate a matrix
+      CALL LA_LAGGE( AA )
+! Generate rhs
+      DO J = 1, NRHS; BB(:,J) = SUM( AA, DIM=2)*J; ENDDO
+!
+! Calculate norm1 of the matrix AA
+      ANORM = LA_LANGE( AA )
+! Calculate the condition namber of the matrix AA
+      CALL LA_GETRF(AA, RCOND=RCOND); COND = 1.0_WP / RCOND
+! Get the machine epsilon
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B, IPIV, INFO )
+      ANORMX = 0.0_WP; ANORM1 = 0.0_WP
+      DO J = 1, NRHS; ANORMX = MAX( ANORMX, LA_LANGE( B(:,J) ) ); ENDDO
+      B = BB - MATMUL(AA,B)
+      DO J = 1, NRHS; ANORM1 = MAX( ANORM1, LA_LANGE( B(:,J) ) ); ENDDO
+      RATIO = ANORM1 / ( ANORM * ANORMX * EPS )
+      IF( INFO /= 0 .OR. RATIO > THRESH )THEN
+         FTESTS = FTESTS + 1
+         FMATR = FMATR + 1
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'Test 1 -- ''CALL LA_GESV( A, B, IPIV, INFO )'', Failed.'
+         WRITE(NOUT,'( A, I4, A, I4, A, I4, A )') 'Matrix ', N, ' x', N, ' with ', &
+                    NRHS, ' rhs.'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) '|| A ||1 = ', ANORM, ' COND = ', COND
+         WRITE(NOUT,*)  '|| X ||1 = ', ANORMX, ' || B - AX ||1 = ', ANORM1
+         WRITE(NOUT,*) 'ratio = || B - AX || / ( || A ||*|| X ||*eps ) = ',  RATIO
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(:,1), IPIV, INFO )
+      ANORMX = LA_LANGE( B(:,1) ); B(:,1) = BB(:,1) - MATMUL(AA,B(:,1))
+      ANORM1 = LA_LANGE( B(:,1) ); RATIO = ANORM1 / ( ANORM * ANORMX * EPS )
+      IF( INFO /= 0 .OR. RATIO > THRESH )THEN
+         FTESTS = FTESTS + 1
+         FMATR = FMATR + 1
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'Test 2 -- ''CALL LA_GESV( A, B(:,1), IPIV, INFO )'', Failed.'
+         WRITE(NOUT,'( A, I4, A, I4, A, I4, A )') 'Matrix ', N, ' x', N, ' with ', &
+                    NRHS, ' rhs.'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) '|| A ||1 = ', ANORM, ' COND = ', COND
+         WRITE(NOUT,*)  '|| X ||1 = ', ANORMX, ' || B - AX ||1 = ', ANORM1
+         WRITE(NOUT,*) 'ratio = || B - AX || / ( || A ||*|| X ||*eps ) = ',  RATIO
+      END IF
+!
+      ISEED(1)=4000; ISEED(2)=50; ISEED(3)=1997; iseed(4)=11
+      CALL LA_LAGGE( AA, ISEED=ISEED )
+      ANORM = LA_LANGE( AA, 'F' ); CALL LA_GETRF(AA, RCOND=RCOND)
+      A=AA; B=BB
+      CALL LA_GESV(  A, B )
+      ANORMX = 0.0_WP; ANORM1 = 0.0_WP
+      DO J = 1, NRHS; ANORMX = MAX( ANORMX, LA_LANGE( B(:,J) ) ); ENDDO
+      B = BB - MATMUL(AA,B)
+      DO J = 1, NRHS; ANORM1 = MAX( ANORM1, LA_LANGE( B(:,J) ) ); ENDDO
+      RATIO = ANORM1 / ( ANORM * ANORMX * EPS )
+      IF( INFO /= 0 .OR. RATIO > THRESH )THEN
+         FTESTS = FTESTS + 1
+         FMATR = FMATR + 1
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'Test 3 -- ''CALL LA_GESV( A, B )'', Failed.'
+         WRITE(NOUT,'( A, I4, A, I4, A, I4, A )') 'Matrix ', N, ' x', N, ' with ', &
+                    NRHS, ' rhs.'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) '|| A ||f = ', ANORM, ' COND = ', COND
+         WRITE(NOUT,*)  '|| X ||f = ', ANORMX, ' || B - AX ||f = ', ANORM1
+         WRITE(NOUT,*) 'ratio = || B - AX || / ( || A ||*|| X ||*eps ) = ',  RATIO
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(:,1) )
+      ANORMX = LA_LANGE( B(:,1) ); B(:,1) = BB(:,1) - MATMUL(AA,B(:,1))
+      ANORM1 = LA_LANGE( B(:,1) ); EPS = EPSILON(1.0_WP)
+      RATIO = ANORM1 / ( ANORM * ANORMX * EPS )
+      IF( INFO /= 0 .OR. RATIO > THRESH )THEN
+         FTESTS = FTESTS + 1
+         FMATR = FMATR + 1
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'Test 4 -- ''CALL LA_GESV( A, B(:,1) )'', Failed.'
+         WRITE(NOUT,'( A, I4, A, I4, A, I4, A )') 'Matrix ', N, ' x', N, ' with ', &
+                    NRHS, ' rhs.'
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) '|| A ||f = ', ANORM, ' COND = ', COND
+         WRITE(NOUT,*)  '|| X ||f = ', ANORMX, ' || B - AX ||f = ', ANORM1
+         WRITE(NOUT,*) 'ratio = || B - AX || / ( || A ||*|| X ||*eps ) = ',  RATIO
+      END IF
+!
+  @declare "      DEALLOCATE ( " y n " )"
+      A, AA, B, BB, IPIV, D, STAT=ISTAT
+  @enddeclare
+!
+      END DO
+!
+      WRITE(NOUT,*)
+      WRITE(NOUT,*) '--------------------------------------------------------'
+      WRITE(NOUT,*)
+      WRITE(NOUT,'( I4, A, I2, A, I4, A )') NMATR, ' matrices were tested with ', &
+                   NTESTS, ' tests. NRHS was ', NRHS, ' and one.'
+      WRITE(NOUT,'( I4, A )') NMATR*NTESTS - FTESTS, ' tests passed.'
+      WRITE(NOUT,'( I4, A )') FTESTS, ' tests failed.'
+!
+!     Tests for the argument error faults
+      N = 100
+  @declare "      ALLOCATE ( " y n " )"
+      A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS), IPIV(N), D(N)
+  @enddeclare
+!
+      A=AA; B=BB
+      CALL LA_GESV(  DUMMY, B, INFO=INFO )
+      IF( INFO /= -1 .AND. INFO /= -2 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( DUMMY, B, INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be either -1 or -2'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  DUMMY, B(:,1), INFO=INFO )
+      IF( INFO /= -1 .AND. INFO /= -2 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( DUMMY, B(:,1), INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be either -1 or -2'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A(:,1:N-1), B, INFO=INFO )
+      IF( INFO /= -1 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A(:,1:N-1), B, INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -1'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A(:,1:N-1), B(:,1), INFO=INFO )
+      IF( INFO /= -1 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A(:,1:N-1), B(:,1), INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -1'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(1:N-1,:), INFO=INFO )
+      IF( INFO /= -2 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A, B(1:N-1,:), INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -2'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(1:N-1,1), INFO=INFO )
+      IF( INFO /= -2 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A, B(1:N-1,1), INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -2'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(1:N-1,:), INFO=INFO )
+      IF( INFO /= -2 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A, B(1:N-1,:), INFO=INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -2'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B, IPIV(1:N-1), INFO )
+      IF( INFO /= -3 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A, B, IPIV(1:N-1), INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -3'
+      END IF
+!
+      A=AA; B=BB
+      CALL LA_GESV(  A, B(:,1), IPIV(1:N-1), INFO )
+      IF( INFO /= -3 )THEN
+         WRITE(NOUT,*)
+         WRITE(NOUT,*) '--------------------------------------------------------'
+         WRITE(NOUT,*)
+         FETESTS = FETESTS +1
+         WRITE(NOUT,*) 'INFO = ', INFO
+         WRITE(NOUT,*) 'Test ''CALL LA_GESV( A, B, IPIV(1:N-1), INFO )'' failed,'
+         WRITE(NOUT,*) 'INFO returned should be -3'
+      END IF
+!
+      WRITE(NOUT,*)
+      WRITE(NOUT,*) '--------------------------------------------------------'
+      WRITE(NOUT,*)
+      WRITE(NOUT,'( I2, A )') NETESTS, ' error exits tests were ran'
+      WRITE(NOUT,'( I4, A )') NETESTS - FETESTS, ' tests passed.'
+      WRITE(NOUT,'( I4, A )') FETESTS, ' tests failed.'
+!
+      END PROGRAM LA_@(pre)GESV_MG_EXAMPLE
+@rout !

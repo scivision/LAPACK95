@@ -1,0 +1,69 @@
+!
+!  -- LAPACK95 Timing routines (version 2.1) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August, 2000
+!
+! --------------  LAPACK95/TIMING directory  -----------------------
+
+   The TIMING directory contains Fortran95 example timing routines that 
+produce performance measurements for some basic computational routines.
+   To produce the executable files
+ 
+ make xtimingd
+   or 
+ make xtimings  
+ - this will produce the program for testing the real (double and single
+precision ) versions of the routines. 
+
+ make xtimingz
+    or
+ make xtimingc
+ - this will produce the program for the complex (double and single precision)
+versions.
+ 
+ The  real versions of the routines has calling sequences to the following
+routines: LA_GESV, LA_GEEV - eigenvalues are required only, LA_GEEV - 
+eigenvalues and right eigenvectors, LA_GESDD - singular values only, 
+LA_GESDD - singular values and left and right singular vectors, 
+LA_GESVD - singular values and left and right singular vectors.
+To provide the comparison the corresponding routines from LAPACK are called.
+The time is measured using the Fortran95 cpu_time routine and rtc() (Real
+Time Clock) function.
+ The complex versions has calling sequences to two lapack95 routines -
+LA_GESV and LA_GESDD - singular values and left and right singular vectors.
+
+For the different architectures the optimal value of NB (the blocksize) is 
+different. Thus we provide the ilaenv function changed so, that it will 
+supply the program with a particular value of NB. The default value is 28
+and if another value is desired the ilaenv function should be changed.
+Some good values for NB are:
+DEC Alpha:         NB=28
+COMPAC AS DS-20:   NB=28
+Intel Pentium II:  NB=40
+Intel Pentium III: NB=40
+IBM Power2:        NB=32
+IBM Power3:        NB=32
+SUN UltraSpark II: NB=64
+SGI Origin 2000:   NB=64
+
+ The directory is supplied with Makefile which includes the make.inc file
+from the LAPACK95 directory. To compile the program you need to chose the
+right options for your architecture.
+
+ The program can be run either by typing:
+ 
+ echo 100 | ./xtimings
+(suppose that 100 is the desired value of N)
+
+ or 
+ 
+ ./xtimings 
+ and then supplying the desired value for N
+
+  For convenience there is a script called go which is compiling and
+running a chosen timing program. The script needs two arguments - 
+the precision that is needed and the value of N for which the timing routine
+will be executed. 
+  To compile and run the single real version of the timing program for value
+of N=100 do:
+              ./go single 100

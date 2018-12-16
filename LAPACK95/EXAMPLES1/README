@@ -1,0 +1,50 @@
+!
+!  -- LAPACK95 interface driver routine (version 2.1) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August 15, 2000
+!
+! --------------  LAPACK95/EXAMPLES1 directory  -----------------------
+
+  This directory contains Fortran95 programs by which were obtained
+the results in the LAPACK95 Users' Guide. There are here: 1) Fortran
+example main programs with the same name as in the LAPACK95 Users'
+Guide, but in lower case letters, 2) the input data for the example
+programs if necessary (the input data are automatically read in by the
+example programs), 3) the makefile by which an executable program can
+be generated, 4) a script file "go = make clean; make la_$1_example;
+la_$1_example" and 5) this README file.
+
+  Before running the example programs one must
+    1. verify the compiler options and library names "OPTS0",
+       "MODLIB", "LAPACK77", "BLAS" and "SUF" in the make.inc file
+       at the LAPACK95 directory (LAPACK version 3 or higher should
+       be linked with this LAPACK95 version).
+    2. generate the LAPACK95 library, go to SRC directory (README
+       file)
+    3. run example programs. For example,
+          
+           make la_gesv_example
+
+  This "make" statement will compile the example Fortran program
+
+                  la_gesv_example.f90,
+
+link with the necessary libraries
+
+                  lapack95.a, lapack.a and blas.a,
+
+and generate the executable program
+
+                  la_gesv_example
+
+  One has to run this executable program now. All programs run in
+single precision.
+
+                   ./la_gesv_example
+
+  The script should be run as follows
+
+           go gesv
+
+It compiles the Fortran95 example program, links and runs the
+executable program.

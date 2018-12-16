@@ -1,0 +1,44 @@
+!
+!  -- LAPACK95 interface driver routine (version 2.1) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August 15, 2000
+!
+! ----------------------  LAPACK90 directory  --------------
+
+  This directory contains the following:
+  1) Fife subdirectories:
+    a) SRC (directory): Source code for all LAPACK95 routines.
+    b) EXAMPLES1 (directory): Simple program examples for all
+       LAPACK95 driver routines. These programs have been used
+       for the numerical examples in Part 2 of the LAPACK95
+       Users' Guide.
+    c) EXAMPLES2 (directory): More program examples; see the
+       README file of this directory for details.
+    d) TESTING (directory): Procedures for testing the entire
+       LAPACK95 package or individual routines.
+    e) TIMING (directory): Source code of the timing programs
+       used in the LAPACK95 Users' Guide Chapter 4.
+  2) make.inc file which is used by the makefiles in all the
+     the above mentioned directories. This make.inc must be
+     verify by the installer of LAPACK95 library, and adapt
+     to his computer system necessity. The following compiler
+     options and library names "OPTS0", "MODLIB", "LAPACK77",
+     "BLAS" and "SUF" should be redefined (LAPACK version 3
+     or higher should be linked with this LAPACK95 version).
+  3) There are several others make.inc files which were use
+     for testing of the LAPACK95 library on another machines.
+  4) lapack95_redhat.tgz, the prebuilt LAPACK95 library for
+     the Linux Redhat system.
+
+  The installation procedure:
+
+  1) Verify the make.inc file ("OPTS0", "MODLIB", "LAPACK77",
+     "BLAS" and "SUF").
+  2) cd SRC
+  3) Read the README file.
+  4) Run the make file with one of the selected library name.
+  5) cd ../TESTING
+  6) Read the README file.
+  7) Run the tests as described in README file.
+  8) run for a few tests from the directories EXAMPLES1 and
+     EXAMPLES2.

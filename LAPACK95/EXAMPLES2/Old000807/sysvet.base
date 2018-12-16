@@ -1,0 +1,132 @@
+@extract -b incpath.inc
+@extract -b @(incd)/typeh.inc type=@(@type)
+@ROUT sysv
+@type sreal dreal scplx dcplx
+PROGRAM LA_@(pre)SYSV_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HESV_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+@type sreal dreal scplx dcplx
+   USE F90_LAPACK, ONLY: LA_SYSV
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HESV
+ @type !
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+@type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, J, FAIL, N, NRHS
+!  .. Local Arrays ..
+   INTEGER, ALLOCATABLE :: PIV(:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:)
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:)
+!  .. Executable Statements ..
+@type sreal dreal scplx dcplx
+   WRITE (NOUT,*) '@(pre)SYSV ET_Example Program Results.'
+ @type sherm dherm
+   WRITE (NOUT,*) '@(pre)HESV ET_Example Program Results.'
+ @type !
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N, NRHS
+   PRINT *, 'N = ', N, ' NRHS = ', NRHS
+   ALLOCATE ( A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS), PIV(N) )
+!
+      AA = HUGE(1.0_WP)
+      DO I = 1, N
+        READ (NIN, *) AA(I,I:N)
+      ENDDO
+      DO J = 1, NRHS
+         DO I = 1, N
+            BB(I,J) = ( SUM( AA(I,I:N) ) + SUM( AA(1:I-1,I) ) )*J
+         ENDDO
+      ENDDO
+   A=AA; B=BB
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N
+        WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:)
+      ENDDO
+      WRITE(NOUT,*) 'The RHS matrix B:'
+      DO J = 1, NRHS
+        WRITE (NOUT,*) 'RHS', J; WRITE (NOUT,FMT) B(:,J)
+      ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+ @type sreal dreal scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)SYSV LAPACK Subroutine Results.'
+ @type sherm dherm
+   WRITE ( NOUT, * )'Details of LA_@(pre)HESV LAPACK Subroutine Results.'
+ @type !
+   WRITE ( NOUT, * )
+ 
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSV(A, B )'
+   A=AA; B=BB
+   CALL LA_SYSV( A, B )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_SYSV:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESV(A, B )'
+   A=AA; B=BB
+   CALL LA_HESV( A, B )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_HESV:'
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSV(A, B(:,1) )'
+   A=AA; B=BB
+   CALL LA_SYSV( A, B(1:N,1) )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_SYSV:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESV(A, B(:,1) )'
+   A=AA; B=BB
+   CALL LA_HESV( A, B(1:N,1) )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_HESV:'
+ @type !
+   WRITE (NOUT,FMT) B(:,1)
+! 
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSV( A, B, ''L'' )'
+   A=TRANSPOSE(AA); B=BB
+   CALL LA_SYSV( A, B, 'L' )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_SYSV:'
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESV( A, B, ''L'' )'
+   A=TRANSPOSE(AA); B=BB
+   CALL LA_HESV( A, B, 'L' )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_HESV:'
+ @type !
+   DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+!
+   WRITE(NOUT,*)
+ @type sreal dreal scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_SYSV( A, B(1:N,1), IPIV=PIV, INFO=FAIL )'
+   A=AA; B=BB
+   CALL LA_SYSV( A, B(1:N,1), IPIV=PIV, INFO=FAIL )
+   WRITE(NOUT,*)'B - the solution vectors computed by LA_SYSV, INFO = ', FAIL
+ @type sherm dherm
+   WRITE(NOUT,*) 'CALL LA_HESV( A, B(1:N,1), IPIV=PIV, INFO=FAIL )'
+   A=AA; B=BB
+   CALL LA_HESV( A, B(1:N,1), IPIV=PIV, INFO=FAIL )
+   WRITE(NOUT,*)'B - the solution vectors computed by LA_HESV, INFO = ', FAIL
+ @type !
+   WRITE (NOUT,FMT) B(1:N,1)
+   WRITE (NOUT,*) 'Pivots: ', PIV
+!
+ @type sreal dreal scplx dcplx
+END PROGRAM LA_@(pre)SYSV_ET_EXAMPLE
+ @type sherm dherm
+END PROGRAM LA_@(pre)HESV_ET_EXAMPLE
+ @type !

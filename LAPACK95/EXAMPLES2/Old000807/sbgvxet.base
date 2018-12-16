@@ -1,0 +1,370 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT sbgvx
+ @type sreal dreal scplx dcplx  
+PROGRAM LA_@(pre)SBGVX_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HBGVX_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. USE STATEMENTS
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+ @type sreal dreal scplx dcplx   
+   USE F90_LAPACK, ONLY: LA_SBGVX
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HBGVX
+ @type !  
+!  .. IMPLICIT STATEMENT ..
+   IMPLICIT NONE
+!  .. PARAMETERS ..
+ @type sreal dreal
+   CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+   CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !  
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. LOCAL SCALARS ..
+   CHARACTER(LEN=1) :: UPLO
+   INTEGER :: I, J, INFO, N, KA, KB, M, IL, IU
+   REAL(WP) ::  VL, VU 
+!  .. LOCAL ARRAYS ..
+   INTEGER, ALLOCATABLE :: IFAIL(:) 
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:), W(:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:), Z(:,:), DUMMY(:,:), Q(:,:)
+!  .. EXECUTABLE STATEMENTS ..
+ @type sreal dreal scplx dcplx
+   WRITE (NOUT,*) '@(pre)SBGVX ET_Example Program Results.'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) N, KA, KB
+   PRINT *, 'N = ', N, ' KA = ', KA, ' KB = ', KB
+   ALLOCATE ( A(KA+1,N), AA(KA+1,N), B(KB+1,N), BB(KB+1,N), W(N), Z(N,N) )
+   ALLOCATE (IFAIL(N), Q(N,N))
+!
+   VL = -10.0; VU=10.0; IL=1; IU=N; UPLO = 'U'
+   AA = HUGE(1.0_WP); BB = HUGE(1.0_WP)
+   DO I = 1, KA+1; READ (NIN, *) (AA(I, J), J = KA-I+2, N); ENDDO
+   DO I = 1, KB+1; READ (NIN, *) (BB(I, J), J = KB-I+2, N); ENDDO
+   A=AA; B=BB
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, KA+1; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) AA(I,:); ENDDO
+   WRITE(NOUT,*) 'The matrix B:'
+   DO I = 1, KB+1; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) BB(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)SBGVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, ''U'', Z, INFO )'
+   A=AA; B=BB
+   CALL LA_SBGVX( A, B, W, UPLO, Z, INFO = INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+     UPLO = 'U'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, ''U'', Z )'
+   A=AA; B=BB
+   CALL LA_SBGVX( A, B, W, UPLO, Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, Z=Z )'
+   A=AA; B=BB
+   CALL LA_SBGVX( A, B, W, Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, ''L'', Z, INFO=INFO )'
+   A=AA; B=BB; W = HUGE(1.0_WP); Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+! Starting the error tests: 
+! error 1
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( DUMMY, B, W, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( DUMMY, B, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 2
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, DUMMY, W, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, DUMMY, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 3
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W(1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 4
+   UPLO = '9'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO=''9'', INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 5
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z(:, 1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z(:, 1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 5
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z(1:N-1,:), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 6
+   VL = 10.0; VU = -10.0
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, M, IFAIL, Q, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 7
+   IL = 1; IU = N; VL=-10.0; VU=10.0
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, IL, IU, M, IFAIL, Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, IL, IU, M, IFAIL, Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N; IL=1
+! error 8
+   IL = -1; IU = N+1
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N; IL=1
+! error 9
+   IU = N+1
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N
+! error 10
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W,  UPLO, Z, VL, VU, M=M, IFAIL=IFAIL(1:N-1), Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL(1:N-1), Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 10
+   UPLO= 'L'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W,  UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q(1:N-1,:), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO 
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q(:,1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_SBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO   
+!
+END PROGRAM LA_@(pre)SBGVX_ET_EXAMPLE
+ @type sherm dherm
+   WRITE (NOUT,*) '@(pre)HBGVX ET_Example Program Results.'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) N, KA, KB
+   PRINT *, 'N = ', N, ' KA = ', KA, ' KB = ', KB
+   ALLOCATE ( A(KA+1,N), AA(KA+1,N), B(KB+1,N), BB(KB+1,N), W(N), Z(N,N) )
+   ALLOCATE (IFAIL(N), Q(N,N))
+!
+   VL = -10; VU=10; IL=1; IU=N; UPLO = 'U'
+   AA = HUGE(1.0_WP); BB = HUGE(1.0_WP)
+   DO I = 1, KA+1; READ (NIN, *) (AA(I, J), J = KA-I+2, N); ENDDO
+   DO I = 1, KB+1; READ (NIN, *) (BB(I, J), J = KB-I+2, N); ENDDO
+   A=AA; B=BB
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, KA+1; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) AA(I,:); ENDDO
+   WRITE(NOUT,*) 'The matrix B:'
+   DO I = 1, KB+1; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) BB(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)HBGVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, ''U'', Z, INFO )'
+   A=AA; B=BB
+   CALL LA_HBGVX( A, B, W, UPLO, Z, INFO = INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+     UPLO = 'U'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, ''U'', Z )'
+   A=AA; B=BB
+   CALL LA_HBGVX( A, B, W, UPLO, Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, Z=Z )'
+   A=AA; B=BB
+   CALL LA_HBGVX( A, B, W, Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+     UPLO = 'L'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO=''L'', Z=Z, INFO=INFO )'
+   A=AA; B=BB; W = HUGE(1.0_WP); Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z=Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )'
+   A=AA; B=BB; W = HUGE(1.0_WP); Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   
+! Starting the error tests: 
+! error 3
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W(1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 4
+   UPLO = '9'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO=''9'', INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 5
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z(:, 1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z(:, 1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 5
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z(1:N-1,:), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 6
+   VL = 10; VU = -10
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M, IFAIL, Q, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 7
+   IL = 1; IU = N; VL=-10; VU=10
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, IL, IU, M, IFAIL, Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, IL, IU, M, IFAIL, Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N; IL=1
+! error 8
+   IL = -1; IU = N+1
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N; IL=1
+! error 9
+   IU = N+1
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z, IL=IL, IU=IU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   IU=N
+! error 10
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W,  UPLO, Z, VL, VU, M=M, IFAIL=IFAIL(1:N-1), Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL(1:N-1), Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 10
+   UPLO= 'L'
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W,  UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )' 
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q(1:N-1,:), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO 
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, Z, VL, VU, M=M, IFAIL=IFAIL, Q=Q(:,1:N-1), INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, Z,  VL, VU, M=M, IFAIL=IFAIL, Q=Q(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+! error 11
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )'
+   A=AA; B=BB; Z = HUGE(1.0_WP)
+   CALL LA_HBGVX( A, B, W, UPLO, VL=VL, VU=VU, M=M, IFAIL=IFAIL, Q=Q, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO   
+!
+END PROGRAM LA_@(pre)HBGVX_ET_EXAMPLE
+@type !

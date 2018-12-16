@@ -1,0 +1,223 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT gees
+PROGRAM LA_@(pre)GEES_ET_EXAMPLE
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+   USE F90_LAPACK, ONLY: LA_GEES
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+   INTERFACE
+ @type sreal dreal
+     LOGICAL FUNCTION SELECT(WR, WI)
+        USE LA_PRECISION, ONLY: WP => @(upr)P
+        REAL(WP), INTENT(IN) :: WR, WI
+ @type scplx dcplx
+     LOGICAL FUNCTION SELECT(W)
+        USE LA_PRECISION, ONLY: WP => @(upr)P
+        COMPLEX(WP), INTENT(IN) :: W
+ @type !
+     END FUNCTION SELECT
+   END INTERFACE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, INFO, N, SDIM
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:,:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), VS(:,:), DUMMY(:,:)
+ @type sreal dreal
+   REAL(WP), ALLOCATABLE :: WR(:), WI(:)
+ @type scplx dcplx
+   @(type)(WP), ALLOCATABLE :: W(:)
+ @type !
+!  .. Executable Statements ..
+   WRITE (NOUT,*) 'GEES ET_Example Program Results.'
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+ @type sreal dreal
+   ALLOCATE ( A(N,N), AA(N,N), WR(N), WI(N), VS(N,N) )
+ @type scplx dcplx
+   ALLOCATE ( A(N,N), AA(N,N), W(N), VS(N,N) )
+ @type !
+!
+      READ (NIN, *) AA
+   A=AA
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+ @type sreal dreal
+   WRITE ( NOUT, * )'Details of LA_@(pre)GEES LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS )'
+   A=AA; VS = HUGE(1.0_WP)
+   CALL LA_GEES( A, WR, WI, VS )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, SELECT=SELECT, SDIM=SDIM, INFO=INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, SELECT=SELECT, SDIM = SDIM, INFO = INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI )'
+   A=AA
+   CALL LA_GEES( A, WR, WI )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( DUMMY, WR, WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( DUMMY, WR, WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR(1:N-1), WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR(1:N-1), WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI(1:N-1), VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI(1:N-1), VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS(1:N-1,:), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS(1:N-1,:), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS(:,1:N-1), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS(:,1:N-1), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS, SDIM=SDIM )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS, SDIM=SDIM )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_@(pre)GEES_ET_EXAMPLE
+ @type scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)GEES LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, W, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, VS )'
+   A=AA; VS = HUGE(1.0_WP)
+   CALL LA_GEES( A, W, VS )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, SELECT=SELECT, SDIM=SDIM, INFO=INFO )'
+   A=AA
+   CALL LA_GEES( A, W, SELECT=SELECT, SDIM = SDIM, INFO = INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W )'
+   A=AA
+   CALL LA_GEES( A, W )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( DUMMY, W, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( DUMMY, W, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR(1:N-1), VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, W(1:N-1), VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W(1:N-1), VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, W(1:N-1), VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, VS(1:N-1,:), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, W, VS(1:N-1,:), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, VS(:,1:N-1), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, W, VS(:,1:N-1), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, W, VS, SDIM=SDIM )'
+   A=AA
+   CALL LA_GEES( A, W, VS, SDIM=SDIM )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_@(pre)GEES_ET_EXAMPLE
+ @type !
+!  CONTAINS
+ @type sreal dreal
+   LOGICAL FUNCTION SELECT(WR, WI)
+      USE LA_PRECISION, ONLY: WP => @(upr)P
+      REAL(WP), INTENT(IN) :: WR, WI
+      IF( WR > 0.0_WP ) THEN; SELECT = .TRUE.
+ @type scplx dcplx
+   LOGICAL FUNCTION SELECT(W)
+      USE LA_PRECISION, ONLY: WP => @(upr)P
+      COMPLEX(WP), INTENT(IN) :: W
+      INTRINSIC AIMAG
+      IF( AIMAG(W) > 0.0_WP ) THEN; SELECT = .TRUE.
+ @type !
+      ELSE; SELECT = .FALSE.; END IF 
+   END FUNCTION SELECT

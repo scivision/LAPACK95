@@ -1,0 +1,52 @@
+!
+!  -- LAPACK95 README file (version 2.1) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     August 15, 2000
+!
+! --------------  LAPACK95/EXAMPLES2 directory  -----------------------
+
+  This directory contains Fortran95 example test programs for all the
+LAPACK95 driver subroutines. Every LAPACK95 driver subroutine has all
+needed precision and arithmetic versions; single precision, double
+precision, complex and double complex. There are here: 1) Fortran95
+example test programs 2) the input data for these example programs if
+necessary, 3) the makefile by which an executable program can be
+generated, executed (results are stored on the file), there are for
+scripts by which one can run all test at once and 5) this README file.
+
+  Before running the example programs one must
+
+    1. verify the compiler options and library names "OPTS0",
+       "MODLIB", "LAPACK77", "BLAS" and "SUF" in the make.inc
+       file at the LAPACK95 directory (LAPACK version 3 or higher
+       should be linked with this LAPACK95 version).
+    2. generate the LAPACK95 library, go to SRC directory (README
+       file)
+    3. run the example programs:
+
+           make xnameet, where x can be s, d, c and z, name is the
+                         LAPACK routine name (for example gesv) and
+                         et indicates an example test. For example
+
+           make sgesvet # single precision test
+           make dgesvet # double precision test
+           make cgesvet # complex precision test
+           make zgesvet # dcomplex precision test
+
+  The results are stored on
+           sgesvet.res # single precision results
+           dgesvet.res # double precision results
+           cgesvet.res # complex precision results
+           zgesvet.res # dcomplex precision results
+
+  The rest of the Fortran example test programs can be run in the same
+way as the above "xgesvet" tests of "la_gesv" LAPACK95 driver.
+
+  All test can be ran at once using the following four scripts:
+
+  runsingle -- script runs the single precision example test programs
+  rundouble -- script runs the double precision example test programs
+  runcomplex -- script runs the complex single precision example test
+                programs
+  rundcomplex -- script runs the complex double precision example test
+                 programs

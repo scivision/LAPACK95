@@ -1,0 +1,213 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT gegs
+PROGRAM LA_@(pre)GEGS_ET_EXAMPLE
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+   USE F90_LAPACK, ONLY: LA_GEGS
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, INFO, N
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:), VSL(:,:), VSR(:,:), &
+ @type sreal dreal
+                ALPHAR(:), ALPHAI(:), BETA(:), DUMMY(:,:)
+ @type scplx dcplx sherm dherm
+                ALPHA(:), BETA(:), DUMMY(:,:)
+ @type !
+!  .. Executable Statements ..
+   WRITE (NOUT,*) '@(pre)GEGS ET_Example Program Results.'
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+ @type sreal dreal
+   ALLOCATE ( A(N,N), AA(N,N), ALPHAR(N), ALPHAI(N), BETA(N), &
+ @type scplx dcplx sherm dherm
+   ALLOCATE ( A(N,N), AA(N,N), ALPHA(N), BETA(N), &
+ @type !
+              VSL(N,N), VSR(N,N), B(N,N), BB(N,N) )
+!
+   READ (NIN, *) AA, BB
+   A=AA; B=BB
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:); ENDDO
+   WRITE(NOUT,*) 'The matrix B:'
+   DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) B(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)GEGS LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+ @type sreal dreal
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHAR, ALPHAI, BETA, VSL, VSR, INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHAR, ALPHAI, BETA, VSL, VSR, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) ' Alphar:'
+   WRITE(NOUT,FMT) ALPHAR
+   WRITE(NOUT,*) ' Alphai:'
+   WRITE(NOUT,FMT) ALPHAI
+   WRITE(NOUT,*) ' Beta:'
+   WRITE(NOUT,FMT) BETA
+   WRITE(NOUT,*) 'VSL:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VSL(:,I); END DO
+   WRITE(NOUT,*) 'VSR:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VSR(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) 'A:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(:,I); END DO
+   WRITE(NOUT,*) 'B:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) B(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( DUMMY, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( DUMMY, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, DUMMY, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, DUMMY, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHAR(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHAR(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHAI=ALPHAI(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHAI=ALPHAI(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, BETA=ALPHAI(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, BETA=ALPHAI(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSL=VSL(:,1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSL=VSL(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSL=VSL(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSL=VSL(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSR=VSR(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSR=VSR(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSR=VSR(:,1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSR=VSR(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_@(pre)GEGS_ET_EXAMPLE
+ @type scplx dcplx sherm dherm
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHA, BETA, VSL, VSR, INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHA, BETA, VSL, VSR, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) ' Alpha:'
+   WRITE(NOUT,FMT) ALPHA
+   WRITE(NOUT,*) ' Beta:'
+   WRITE(NOUT,FMT) BETA
+   WRITE(NOUT,*) 'VSL:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VSL(:,I); END DO
+   WRITE(NOUT,*) 'VSR:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VSR(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) 'A:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(:,I); END DO
+   WRITE(NOUT,*) 'B:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) B(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( DUMMY, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( DUMMY, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, DUMMY, INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, DUMMY, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHA(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, ALPHA=ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, ALPHA=ALPHA(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, BETA=ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, BETA=ALPHA(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSL=VSL(:,1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSL=VSL(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSL=VSL(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSL=VSL(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSR=VSR(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSR=VSR(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGS( A, B, VSR=VSR(:,1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGS( A, B, VSR=VSR(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_@(pre)GEGS_ET_EXAMPLE
+ @type !

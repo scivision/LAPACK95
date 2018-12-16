@@ -1,0 +1,41 @@
+#
+#  -- LAPACK95 interface driver routine (version 2.0) --
+#     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+#     August 5, 2000
+#
+FC	 = f90 -free
+FC1      = f90 -fixed
+
+OPTS0    = -fpe1 -O -dA
+MODLIB   = -I./../lapack95_modules
+OPTS1    = -c $(OPTS0)
+OPTS3    = $(OPTS1) $(MODLIB)
+OPTL     = -o 
+OPTLIB   =
+
+LAPACK_PATH = /usr/local/lib/LAPACK3
+
+LAPACK95 = ../lapack95.a
+LAPACK77 = $(LAPACK_PATH)/lapack.a
+TMG77    = $(LAPACK_PATH)/tmglib.a
+BLAS     = $(LAPACK_PATH)/blas.a
+
+LIBS     = $(LAPACK95) $(TMG77) $(LAPACK77) $(BLAS)
+SUF      = f90
+
+XX = 'rm' -f $@; \
+        'rm' -f $@.res; \
+	$(FC) $(OPTS0) -o $@ $(MODLIB) $@.$(SUF) $(OPTLIB) $(LIBS); \
+        $@ < $@.dat > $@.res; \
+        'rm' -f $@
+
+YY = $(FC) $(OPTS0) -o $@ $(MODLIB) $@.$(SUF) $(OPTLIB) $(LIBS)
+
+.SUFFIXES: .f90 .f .o
+
+.$(SUF).o: 
+	$(FC) $(OPTS3) $<
+
+
+.f.o:
+	$(FC1) $(OPTS3) $< 

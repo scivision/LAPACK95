@@ -1,0 +1,79 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT posv
+PROGRAM LA_@(pre)POSV_ET_EXAMPLE
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+   USE F90_LAPACK, ONLY: LA_POSV
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, J, INFO, N, NRHS
+!  .. Local Arrays ..
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:)
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:)
+!  .. Executable Statements ..
+   WRITE (NOUT,*) '@(pre)POSV ET_Example Program Results.'
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N, NRHS
+   PRINT *, 'N = ', N, ' NRHS = ', NRHS
+   ALLOCATE ( A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS) )
+!
+        READ (NIN, *) AA
+      DO J = 1, NRHS
+         BB(:,J) = SUM( AA, DIM=2)*J
+      ENDDO
+      DO I = 2, N
+         AA(I,1:I-1) = 0.0_WP
+      ENDDO
+!
+   A=AA; B=BB
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N
+        WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:)
+      ENDDO
+      WRITE(NOUT,*) 'The RHS matrix B:'
+      DO J = 1, NRHS
+        WRITE (NOUT,*) 'RHS', J; WRITE (NOUT,FMT) B(:,J)
+      ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)POSV LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_POSV(A, B )'
+   A=AA; B=BB
+   IF (NRHS .GT. 1) THEN
+      CALL LA_POSV( A, B )
+   ELSE
+      CALL LA_POSV( A, B(1:N,1) )
+   END IF
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_POSV:'
+   DO J = 1, NRHS
+      WRITE (NOUT,FMT) B(:,J)
+   END DO
+! 
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_POSV( A, B, ''L'' )'
+   A=TRANSPOSE(AA); B=BB
+   CALL LA_POSV( A, B, 'L' )
+   WRITE(NOUT,*)'   B - the solution vectors computed by LA_POSV:'
+   DO J = 1, NRHS
+      WRITE (NOUT,FMT) B(:,J)
+   END DO
+   A=AA; B=BB
+   CALL LA_POSV( A, B(1:N,1), 'U', INFO )
+   WRITE(NOUT,*)'B - the solution vectors computed by LA_POSV, INFO = ', INFO
+   WRITE (NOUT,FMT) B(1:N,1)
+!
+END PROGRAM LA_@(pre)POSV_ET_EXAMPLE

@@ -1,0 +1,159 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT gegv
+PROGRAM LA_@(pre)GEGV_ET_EXAMPLE
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+   USE F90_LAPACK, ONLY: LA_GEGV
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, INFO, N
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:)
+   @(type)(WP), ALLOCATABLE :: A(:,:), B(:,:), VL(:,:), &
+ @type sreal dreal
+                            VR(:,:), ALPHAR(:), ALPHAI(:), BETA(:), DUMMY(:,:)
+ @type scplx dcplx
+                            VR(:,:), ALPHA(:), BETA(:), DUMMY(:,:)
+ @type !
+!  .. Executable Statements ..
+   WRITE (NOUT,*) '@(pre)GEGV ET_Example Program Results.'
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+ @type sreal dreal
+   ALLOCATE ( A(N,N), AA(N,N), ALPHAR(N), ALPHAI(N), BETA(N), &
+ @type scplx dcplx
+   ALLOCATE ( A(N,N), AA(N,N), ALPHA(N), BETA(N), &
+ @type !
+              VL(N,N), VR(N,N), B(N,N), BB(N,N) )
+!
+   READ (NIN, *) AA, BB
+   A=AA; B=BB
+   WRITE(NOUT,*) 'The matrix A:'
+   DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:); ENDDO
+   WRITE(NOUT,*) 'The matrix B:'
+   DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) B(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)GEGV LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+ @type sreal dreal
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHAR, ALPHAI, BETA, VL, VR, INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHAR, ALPHAI, BETA, VL, VR, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) ' Alphar:'
+   WRITE(NOUT,FMT) ALPHAR
+   WRITE(NOUT,*) ' Alphai:'
+   WRITE(NOUT,FMT) ALPHAI
+ @type scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHA, BETA, VL, VR, INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHA, BETA, VL, VR, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) ' Alpha:'
+   WRITE(NOUT,FMT) ALPHA
+ @type !
+   WRITE(NOUT,*) ' Beta:'
+   WRITE(NOUT,FMT) BETA
+   WRITE(NOUT,*) 'VL:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VL(:,I); END DO
+   WRITE(NOUT,*) 'VR:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VR(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+   WRITE(NOUT,*) 'A:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(:,I); END DO
+   WRITE(NOUT,*) 'B:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) B(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( DUMMY, B, INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( DUMMY, B, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, DUMMY, INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, DUMMY, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+ @type sreal dreal
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHAR(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHAR(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHAI=ALPHAI(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHAI=ALPHAI(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, BETA=ALPHAI(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, BETA=ALPHAI(1:N-1), INFO=INFO )
+ @type scplx dcplx
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHA(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, ALPHA=ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, ALPHA=ALPHA(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, BETA=ALPHA(1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, BETA=ALPHA(1:N-1), INFO=INFO )
+ @type !
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, VL=VL(:,1:N-1), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, VL=VL(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, VL=VL(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, VL=VL(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, VR=VR(1:N-1,:), INFO=INFO )'
+   A=AA
+   CALL LA_GEGV( A, B, VR=VR(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEGV( A, B, VR=VR(:,1:N-1) )'
+   A=AA
+   CALL LA_GEGV( A, B, VR=VR(:,1:N-1) )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_@(pre)GEGV_ET_EXAMPLE

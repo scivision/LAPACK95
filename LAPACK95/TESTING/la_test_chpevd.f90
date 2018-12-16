@@ -1,0 +1,59 @@
+SUBROUTINE LA_TEST_CHPEVD( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
+!
+!  -- LAPACK95 interface driver routine (version 1.1) --
+!     UNI-C, Denmark; 
+!     May 29, 1999
+!
+!  .. Use Statements ..
+   USE LA_PRECISION, ONLY: WP => SP
+   USE F95_LAPACK, ONLY: LA_HPEVD
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Scalar Arguments ..
+   INTEGER, INTENT(IN) :: N, LDZ, LWORK, LRWORK, LIWORK
+   INTEGER, INTENT(INOUT) :: INFO
+   CHARACTER*1, INTENT(IN) :: JOBZ, UPLO
+!  .. Array Arguments ..
+   COMPLEX(WP), INTENT(INOUT) :: AP(1:N*(N+1)/2)
+   COMPLEX(WP), INTENT(OUT) :: WORK(1:LWORK), Z(1:LDZ, 1:N)
+   REAL(WP), INTENT(OUT) ::  W(1:N)
+   REAL(WP), INTENT(OUT) :: RWORK(1: LRWORK)
+   INTEGER, INTENT(OUT) :: IWORK(1: LIWORK) 
+!  .. Parameters ..
+   CHARACTER(LEN=8),  PARAMETER :: SRNAME = 'LA_HPEVD'
+   CHARACTER(LEN=14), PARAMETER :: SRNAMT = 'LA_TEST_CHPEVD'
+!  .. Common blocks ..
+   INTEGER :: INFOTC
+   COMMON /LINFO95/ INFOTC
+!  .. Local Scalars ..
+   INTEGER :: I, J, IAP, IW, IZ1, IZ2
+   CHARACTER*1 :: IUPLO, IJOBZ
+!  .. Local Arrays ..
+!   INTEGER, SAVE, POINTER :: IWORK(:)
+   LOGICAL, SAVE :: CTEST = .TRUE., ETEST = .TRUE.
+   LOGICAL LSAME
+!  .. Executable Statements ..
+   IAP = N*(N+1)/2; IUPLO = UPLO; IJOBZ = JOBZ; IW = N
+   IZ1 = MAX(1,N); IZ2 = N
+   I = INFO / 100; J = INFO - I*100
+   SELECT CASE(I)
+   CASE (1)
+     IAP = IAP - 1
+   CASE (2)
+     IW = IW - 1
+   CASE (3)
+     IUPLO = 'T'
+   CASE(4)
+     IJOBZ = 'V'
+     IZ2 = IZ2 - 1
+   CASE(:-1,5:)
+     CALL UESTOP(SRNAMT)
+ END SELECT
+ IF ( LSAME (IJOBZ,'V')) THEN
+   CALL LA_HPEVD( AP(1: IAP), W(1:IW), IUPLO, Z(1:IZ1, 1: IZ2), INFO)
+ ELSE
+   CALL LA_HPEVD( AP(1: IAP), W(1:IW), IUPLO, INFO = INFO)
+ ENDIF
+ 
+ CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+END SUBROUTINE LA_TEST_CHPEVD

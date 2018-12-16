@@ -1,0 +1,22 @@
+'rm' -f *.o *.mod *.a core la_*example
+f95 -u -V -dcfuns -dusty -ieee=full -o la_lamch_example -I./../lapack95_modules la_lamch_example.f90  ../lapack95.a /usr/local/lib/tmglib.a /usr/local/lib/lapack.a /usr/local/lib/blas.a
+NAGWare Fortran 95 compiler Release 1.0(448)
+Copyright 1990-1998 The Numerical Algorithms Group Ltd., Oxford, U.K.
+f95comp version is 1.0(448)
+Recursive I/O reference
+Program terminated by fatal error
+ LA_LAMCH Example Program Results.
+ Machine constants, sengle and double precision:
+ eps     5.9604645E-08              1.1102230246251565E-16
+ sfmin   1.1754944E-38             2.2250738585072014E-308
+ base    2.0000000              2.0000000000000000
+ prec    1.1920929E-07              2.2204460492503131E-16
+ t      24.0000000             53.0000000000000000
+ rnd     1.0000000              1.0000000000000000
+ emin   -1.2500000E+02             -1.0210000000000000E+03
+ rmin    1.1754944E-38             2.2250738585072014E-308
+ emax    1.2800000E+02              1.0240000000000000E+03
+ rmax    3.4028235E+38             1.7976931348623157E+308
+ rmax    5.9604645E-08   INFO =  0
+ rmax    1.1102230246251565E-16   INFO =  0
+ rmax   1.6763766753072242E-312   INFO =  2

@@ -1,0 +1,178 @@
+PROGRAM LA_DSPEVX_ET_EXAMPLE
+!
+!  -- LAPACK95 interface driver routine (version 3.0) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     September, 2000
+!
+!  .. USE STATEMENTS
+   USE LA_PRECISION, ONLY: WP => DP
+   USE F95_LAPACK, ONLY: LA_SPEVX
+!  .. IMPLICIT STATEMENT ..
+   IMPLICIT NONE
+!  .. PARAMETERS ..
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. LOCAL SCALARS ..
+   INTEGER :: I, J, INFO, N, NS, M
+!  .. LOCAL ARRAYS ..
+   INTEGER, ALLOCATABLE :: IFAIL(:)
+   REAL(WP), ALLOCATABLE :: AA(:), W(:)
+   REAL(WP), ALLOCATABLE :: A(:), Z(:,:)
+!  .. EXECUTABLE STATEMENTS ..
+   WRITE (NOUT,*) 'DSPEVX ET_Example Program Results.'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+   NS = N*(N+1)/2
+   ALLOCATE ( A(NS), AA(NS), W(N), Z(N,N), IFAIL(N) )
+!
+      READ (NIN, *) AA
+   A=AA
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N
+        WRITE (NOUT,*) 'J = ', I; WRITE (NOUT,FMT) (A(J+(I-1)*I/2),J=1,I)
+      ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_DSPEVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, INFO=INFO )'
+   A=AA
+   CALL LA_SPEVX( A, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, Z=Z, INFO=INFO )'
+   A=AA
+   CALL LA_SPEVX( A, W, Z=Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, ''U'', Z )'
+   A=AA
+   CALL LA_SPEVX( A, W, 'U', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, ''L'', Z )'
+   A=AA
+   CALL LA_SPEVX( A, W, 'L', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )'
+   A=AA
+   CALL LA_SPEVX( A, W, VL=3.0_WP, M=M, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,*) 'The total number of eigenvalues found is ', M
+   WRITE(NOUT,FMT) W(1:M)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, ''U'', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &'
+   WRITE(NOUT,*) '          M=M, IFAIL=IFAIL, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, 'U', Z, -HUGE(1.0_WP), HUGE(1.0_WP), &
+                  M=M, IFAIL=IFAIL, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, ''U'', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &'
+   WRITE(NOUT,*) '         ABSTOL= 2*EPSILON(1.0_WP), INFO=INFO )'
+   A=AA; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, 'U', Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &
+                  ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A(1:5), W, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A(1:5), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, UPLO=''9'', INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, UPLO='9', INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, Z=Z(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, IL=-1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, IL=-1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, IL=N, IU=1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, IL=N, IU=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, IL=1, IU=N+1, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, IL=1, IU=N+1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, IFAIL=IFAIL(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEVX( A, W, IFAIL=IFAIL )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEVX( A, W, IFAIL=IFAIL )
+!
+END!PROGRAM LA_DSPEVX_ET_EXAMPLE

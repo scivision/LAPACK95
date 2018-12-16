@@ -1,0 +1,61 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT GESV
+      PROGRAM LA_@(pre)GESV_Simple
+@extract -b @(incd)/header.inc
+!  .. "Use Statements" ..
+      USE LA_PRECISION, ONLY: WP => @(upr)P
+      USE F77_LAPACK, ONLY: LAF77_GESV => LA_GESV
+      USE F90_LAPACK, ONLY: LAF90_GESV => LA_GESV
+!  .. "Implicit Statement" ..
+      IMPLICIT NONE
+!  .. "Parameters" ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx
+      CHARACTER(LEN=*), PARAMETER :: FMT =                              &
+     &                   '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+      INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. "Local Scalars" ..
+      INTEGER :: I, J, INFO, N, NRHS, LDA, LDB
+!  .. "Local Arrays" ..
+      INTEGER, ALLOCATABLE :: IPIV(:)
+   @declare "      @(type)(WP), ALLOCATABLE :: " y n ""
+      A(:,:), AA(:,:), B(:,:), BB(:,:), DUMMY(:,:)
+   @enddeclare
+      REAL(WP), ALLOCATABLE :: RR(:,:)
+!  .. "Executable Statements" ..
+      WRITE (NOUT,*) '@(pre)GESV Simple Example Program Results.'
+      READ ( NIN, * )   ! Skip heading in data file
+      READ ( NIN, * ) N, NRHS
+      LDA = MAX(1,N); LDB = MAX(1,N)
+   @declare "      ALLOCATE( " y n " )"
+      A(N,N), AA(N,N), B(N,NRHS), BB(N,NRHS), IPIV(N), RR(N,N)
+   @enddeclare
+!
+      DO I = 1, N; READ (NIN, *) (RR(I, J), J = 1, N); ENDDO
+      AA=RR
+      DO J = 1, NRHS; BB(:,J) = SUM( AA, DIM=2)*J; ENDDO
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N; WRITE (NOUT,FMT) AA(I,:); ENDDO
+      WRITE(NOUT,*) 'The RHS matrix B:'
+      DO J = 1, NRHS; WRITE (NOUT,FMT) BB(:,J);
+      ENDDO
+!
+      WRITE(NOUT,*)
+      WRITE(NOUT,*) 'CALL LAF90_GESV( A, B, IPIV, INFO )'
+      A=AA; B=BB
+      CALL LAF90_GESV(  A, B, IPIV, INFO )
+      WRITE(NOUT,*) 'The solution vectors and INFO = ', INFO
+      DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+!
+      WRITE(NOUT,*)
+      WRITE(NOUT,*) 'CALL LAF77_GESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )'
+      A=AA; B=BB
+      CALL LAF77_GESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+      WRITE(NOUT,*) 'The solution vectors and INFO = ', INFO
+      DO J = 1, NRHS; WRITE (NOUT,FMT) B(:,J); END DO
+!
+      END PROGRAM LA_@(pre)GESV_Simple
+@rout !

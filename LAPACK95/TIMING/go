@@ -1,0 +1,28 @@
+#!/bin/sh
+
+if test "$1" = "single" 
+then
+   make xtimings
+   echo $2 | ./xtimings
+   rm -f *.o
+elif test "$1" = "double"
+then
+   make xtimingd
+   echo $2 | ./xtimingd
+   rm -f *.o
+elif test "$1" = "complex"
+then
+   make xtimingc
+   echo $2 | ./xtimingc
+   rm -f *.o
+elif test "$1" = "dcomplex"
+then
+   make xtimingz
+   echo $2 | ./xtimingz
+   rm -f *.o
+else
+  echo "I don't know what to do with $1."
+  echo "You must choose one of: "
+  echo "single double complex dcomplex"
+fi  
+

@@ -1,0 +1,171 @@
+#
+#  -- LAPACK95 interface driver routine (version 1.0) --
+#     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+#     August 15, 2000
+#
+# Makefile.
+.SUFFIXES : .o .f .f90
+
+.f90.o:
+	$(FC90) -c $(FFLAGS) $<
+
+.f.o:
+	$(FC77) -c -O $<
+
+FC90   = f95 -ieee=full
+FFLAGS = -O -I./ -I./../lapack95_modules
+LIBS   = ../lapack95.a /usr/local/lib/lapack.a /usr/local/lib/blas.a
+
+XX = $(FC90) -o $@ $(FFLAGS) $@.f90 $(LIBS)
+la_gels_example: 
+	$(XX)
+
+la_gelss_example: 
+	$(XX)
+
+la_gglse_example: 
+	$(XX)
+
+la_ggglm_example: 
+	$(XX)
+
+la_syev_example: 
+	$(XX)
+
+la_hpev_example:
+	$(XX)
+
+la_sbev_example: 
+	$(XX)
+
+la_stev_example: 
+	$(XX)
+
+la_gees_example:
+	$(XX)
+
+la_geev_example:
+	$(XX)
+
+la_sygv_example: 
+	$(XX)
+
+la_sbgv_example:
+	$(XX)
+
+la_gesvd_example:
+	$(XX)
+
+la_ggsvd_example: 
+	$(XX)
+
+la_gesv_example:	
+	$(XX)
+
+la_gesvx_example: 
+	$(XX)
+
+la_gbsv_example: 
+	$(XX)
+
+la_gbsvx_example:
+	$(XX)
+
+la_syevx_example: 
+	$(XX)
+
+la_sbevx_example: 
+	$(XX)
+
+la_stevx_example:
+	$(XX)
+
+la_gtsv_example:
+	$(XX)
+
+la_gtsvx_example:
+	$(XX)
+
+la_hpevx_example:
+	$(XX)
+
+la_posv_example:
+	$(XX)
+
+la_posvx_example:
+	$(XX)
+
+la_ppsv_example:
+	$(XX)
+
+la_ppsvx_example: 
+	$(XX)
+
+la_geesx_example:
+	$(XX)
+
+la_geevx_example: 
+	$(XX)
+
+la_sygvx_example:
+	$(XX)
+
+la_sbgvx_example:
+	$(XX)
+
+la_pbsv_example: 
+	$(XX)
+
+la_pbsvx_example: 
+	$(XX)
+
+la_ptsv_example: 
+	$(XX)
+
+la_ptsvx_example: 
+	$(XX)
+
+la_sysv_example: 
+	$(XX)
+
+la_hesv_example: 
+	$(XX)
+
+la_sysvx_example: 
+	$(XX)
+
+la_spsv_example: 
+	$(XX)
+
+la_spsvx_example: 
+	$(XX)
+
+la_gelsy_example: 
+	$(XX)
+
+la_syevr_example:
+	$(XX)
+
+la_stevr_example: 
+	$(XX)
+
+la_gges_example:
+	$(XX)
+
+la_ggesx_example: 
+	$(XX)
+
+la_ggev_example:
+	$(XX)
+
+la_ggevx_example:
+	$(XX)
+
+la_hpgv_example:
+	$(XX)
+
+la_hpgvx_example:
+	$(XX)
+
+clean:
+	'rm' -f *.o *.mod *.a core la_*example

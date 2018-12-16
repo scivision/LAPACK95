@@ -1,0 +1,156 @@
+PROGRAM LA_SSTEVX_ET_EXAMPLE
+!
+!  -- LAPACK95 interface driver routine (version 3.0) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     September, 2000
+!
+!  .. USE STATEMENTS
+   USE LA_PRECISION, ONLY: WP => SP
+   USE F95_LAPACK, ONLY: LA_STEVX
+!  .. IMPLICIT STATEMENT ..
+   IMPLICIT NONE
+!  .. PARAMETERS ..
+   CHARACTER(LEN=*), PARAMETER :: FMTR = '(8(1X,F10.3))'
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. LOCAL SCALARS ..
+   INTEGER :: I, INFO, N, M
+!  .. LOCAL ARRAYS ..
+   INTEGER, ALLOCATABLE :: IFAIL(:)
+   REAL(WP), ALLOCATABLE :: D(:), DD(:), E(:), EE(:), W(:), Z(:,:), DUMMY(:)
+!  .. EXECUTABLE STATEMENTS ..
+   WRITE (NOUT,*) 'SSTEVX ET_Example Program Results.'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+   ALLOCATE ( D(N), DD(N), E(N), EE(N), W(N), Z(N,N), IFAIL(N) )
+!
+   READ (NIN, *) DD, EE
+   WRITE(NOUT,*) 'The matrix A:'
+   WRITE (NOUT,*) 'D'; WRITE (NOUT,FMTR) DD
+   WRITE (NOUT,*) 'E'; WRITE (NOUT,FMTR) EE
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_SSTEVX LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, INFO=INFO )'
+   D=DD; E=EE
+   CALL LA_STEVX( D, E, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMTR) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, Z=Z, INFO=INFO )'
+   D=DD; E=EE
+   CALL LA_STEVX( D, E, W, Z=Z, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMTR) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMTR) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, VL=3.0_WP, M=M, INFO=INFO )'
+   D=DD; E=EE
+   CALL LA_STEVX( D, E, W, VL=3.0_WP, M=M, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,*) 'The total number of eigenvalues found is ', M
+   WRITE(NOUT,FMTR) W(1:M)
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, Z, -HUGE(1.0_WP), HUGE(1.0_WP), &'
+   WRITE(NOUT,*) '          M=M, IFAIL=IFAIL, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )'
+   D=DD; E=EE; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, Z, -HUGE(1.0_WP), HUGE(1.0_WP), &
+                  M=M, IFAIL=IFAIL, ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMTR) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMTR) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &'
+   WRITE(NOUT,*) '         ABSTOL= 2*EPSILON(1.0_WP), INFO=INFO )'
+   D=DD; E=EE; M=99999; IFAIL = 99999; Z = HUGE(1.0_WP); W = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, Z, IL=1, IU=N, M=M, IFAIL=IFAIL, &
+                  ABSTOL=2*EPSILON(1.0_WP), INFO=INFO )
+   WRITE(NOUT,*) 'M, INFO, EIGENVALUES:', M, INFO
+   WRITE(NOUT,FMTR) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMTR) Z(:,I); END DO
+   WRITE(NOUT,*) 'IFAIL:'; WRITE (NOUT,*) IFAIL
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( DUMMY, E, W, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( DUMMY, E, W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W(1:N-1), INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E(1:N-2), W, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E(1:N-2), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, Z=Z(1:N-1,:), INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, Z=Z(:,1:N-1), INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, Z=Z(:,1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, VL=10.0_WP, VU=1.0_WP, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, VL=1.0_WP, VU=2.0_WP, IL=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, IL=-1, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, IL=-1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, IL=N, IU=1, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, IL=N, IU=1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, IL=1, IU=N+1, INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, IL=1, IU=N+1, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, IFAIL=IFAIL(1:N-1), INFO=INFO )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, IFAIL=IFAIL(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_STEVX( D, E, W, IFAIL=IFAIL )'
+   D=DD; E=EE; Z = HUGE(1.0_WP)
+   CALL LA_STEVX( D, E, W, IFAIL=IFAIL )
+!
+END!PROGRAM LA_SSTEVX_ET_EXAMPLE

@@ -1,0 +1,19 @@
+# Makefile.
+
+.f90.o:
+	$(FC90) -c $(FFLAGS) $<
+
+.f.o:
+	$(FC77) -c -O $<
+
+FC90   = f95 -O -ieee=full
+FFLAGS = -I/home/unijw/f90/lapack90/LAPACK90/lapack90_modules
+LIBS   = /home/unijw/f90/lapack90/LAPACK90/lapack90.a \
+         /usr/local/lib/LAPACK3/lapack_LINUXi386.a \
+         /usr/local/lib/LAPACK3/blas_LINUXi386.a
+
+hpevep: 
+	$(FC90) -o test $(FFLAGS) hpevep.f90 $(LIBS)
+
+clean:
+	'rm' -f *.o *.mod *.a core *ep *ab

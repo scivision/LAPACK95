@@ -1,0 +1,123 @@
+PROGRAM LA_DGEES_ET_EXAMPLE
+!
+!  -- LAPACK95 interface driver routine (version 3.0) --
+!     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+!     September, 2000
+!
+!  .. USE STATEMENTS
+   USE LA_PRECISION, ONLY: WP => DP
+   USE F95_LAPACK, ONLY: LA_GEES
+!  .. IMPLICIT STATEMENT ..
+   IMPLICIT NONE
+   INTERFACE
+     LOGICAL FUNCTION SELECT(WR, WI)
+        USE LA_PRECISION, ONLY: WP => DP
+        REAL(WP), INTENT(IN) :: WR, WI
+     END FUNCTION SELECT
+   END INTERFACE
+!  .. PARAMETERS ..
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. LOCAL SCALARS ..
+   INTEGER :: I, INFO, N, SDIM
+!  .. LOCAL ARRAYS ..
+   REAL(WP), ALLOCATABLE :: AA(:,:)
+   REAL(WP), ALLOCATABLE :: A(:,:), VS(:,:), DUMMY(:,:)
+   REAL(WP), ALLOCATABLE :: WR(:), WI(:)
+!  .. EXECUTABLE STATEMENTS ..
+   WRITE (NOUT,*) 'GEES ET_Example Program Results.'
+   READ ( NIN, * )   ! SKIP HEADING IN DATA FILE
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+   ALLOCATE ( A(N,N), AA(N,N), WR(N), WI(N), VS(N,N) )
+!
+      READ (NIN, *) AA
+   A=AA
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N; WRITE (NOUT,*) 'I = ', I; WRITE (NOUT,FMT) A(I,:); ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_DGEES LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS )'
+   A=AA; VS = HUGE(1.0_WP)
+   CALL LA_GEES( A, WR, WI, VS )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+   WRITE(NOUT,*) 'Schur vectors:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) VS(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, SELECT=SELECT, SDIM=SDIM, INFO=INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, SELECT=SELECT, SDIM = SDIM, INFO = INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' SDIM = ', SDIM, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI )'
+   A=AA
+   CALL LA_GEES( A, WR, WI )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' Eigenvalues:'
+   WRITE(NOUT,FMT) WR
+   WRITE(NOUT,FMT) WI
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( DUMMY, WR, WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( DUMMY, WR, WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR(1:N-1), WI, VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR(1:N-1), WI, VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI(1:N-1), VS, SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI(1:N-1), VS, SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS(1:N-1,:), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS(1:N-1,:), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS(:,1:N-1), SELECT, SDIM, INFO )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS(:,1:N-1), SELECT, SDIM, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_GEES( A, WR, WI, VS, SDIM=SDIM )'
+   A=AA
+   CALL LA_GEES( A, WR, WI, VS, SDIM=SDIM )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+END PROGRAM LA_DGEES_ET_EXAMPLE
+!  CONTAINS
+   LOGICAL FUNCTION SELECT(WR, WI)
+      USE LA_PRECISION, ONLY: WP => DP
+      REAL(WP), INTENT(IN) :: WR, WI
+      IF( WR > 0.0_WP ) THEN; SELECT = .TRUE.
+      ELSE; SELECT = .FALSE.; END IF 
+   END FUNCTION SELECT

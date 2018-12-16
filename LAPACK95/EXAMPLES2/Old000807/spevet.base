@@ -1,0 +1,208 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT spev
+ @type sreal dreal scplx dcplx
+PROGRAM LA_@(pre)SPEV_ET_EXAMPLE
+ @type sherm dherm
+PROGRAM LA_@(pre)HPEV_ET_EXAMPLE
+ @type !
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+ @type sreal dreal scplx dcplx
+   USE F90_LAPACK, ONLY: LA_SPEV
+ @type sherm dherm
+   USE F90_LAPACK, ONLY: LA_HPEV
+ @type !
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.3))'
+ @type scplx dcplx sherm dherm
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.3,1H,,F7.3,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER :: I, J, INFO, N, NS
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:), W(:)
+   @(type)(WP), ALLOCATABLE :: A(:), Z(:,:)
+!  .. Executable Statements ..
+ @type sreal dreal scplx dcplx
+   WRITE (NOUT,*) '@(pre)SPEV ET_Example Program Results.'
+ @type sherm dherm
+   WRITE (NOUT,*) '@(pre)HPEV ET_Example Program Results.'
+ @type !
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) N
+   PRINT *, 'N = ', N
+   NS = N*(N+1)/2
+   ALLOCATE ( A(NS), AA(NS), W(N), Z(N,N) )
+!
+      READ (NIN, *) AA
+   A=AA
+      WRITE(NOUT,*) 'The matrix A:'
+      DO I = 1, N
+        WRITE (NOUT,*) 'J = ', I; WRITE (NOUT,FMT) (A(J+(I-1)*I/2),J=1,I)
+      ENDDO
+!
+   WRITE ( NOUT, * )'---------------------------------------------------------'
+   WRITE ( NOUT, * )
+ @type sreal dreal scplx dcplx
+   WRITE ( NOUT, * )'Details of LA_@(pre)SPEV LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, ''U'', Z, INFO )'
+   A=AA
+   CALL LA_SPEV( A, W, 'U', Z, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, ''U'', Z )'
+   A=AA
+   CALL LA_SPEV( A, W, 'U', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, Z=Z )'
+   A=AA
+   CALL LA_SPEV( A, W, Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, UPLO=''L'', Z=Z )'
+   A=AA
+   CALL LA_SPEV( A, W, UPLO='L', Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A, W )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A(1:5), W, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A(1:5), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, UPLO=''9'', INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A, W, UPLO='9', INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, Z=Z(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_SPEV( A, W, Z=Z(:,1:N-1) )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_SPEV( A, W, Z=Z(:,1:N-1) )
+!
+END PROGRAM LA_@(pre)SPEV_ET_EXAMPLE
+ @type sherm dherm
+   WRITE ( NOUT, * )'Details of LA_@(pre)HPEV LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, ''U'', Z, INFO )'
+   A=AA
+   CALL LA_HPEV( A, W, 'U', Z, INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO, ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, ''U'', Z )'
+   A=AA
+   CALL LA_HPEV( A, W, 'U', Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, Z=Z )'
+   A=AA
+   CALL LA_HPEV( A, W, Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, UPLO=''L'', Z=Z )'
+   A=AA
+   CALL LA_HPEV( A, W, UPLO='L', Z=Z )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A, W )
+   WRITE(NOUT,*) ' EIGENVALUES:'
+   WRITE(NOUT,FMT) W
+   WRITE(NOUT,*) 'EIGENVECTORS:'
+   DO I = 1, N; WRITE(NOUT,*) 'I = ', I; WRITE (NOUT,FMT) Z(:,I); END DO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A(1:5), W, INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A(1:5), W, INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W(1:N-1), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A, W(1:N-1), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, UPLO=''9'', INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A, W, UPLO='9', INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, Z=Z(1:N-1,:), INFO=INFO )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A, W, Z=Z(1:N-1,:), INFO=INFO )
+   WRITE(NOUT,*) 'INFO = ', INFO
+!
+   WRITE(NOUT,*)
+   WRITE(NOUT,*) 'CALL LA_HPEV( A, W, Z=Z(:,1:N-1) )'
+   A=AA; Z = HUGE(1.0_WP)
+   CALL LA_HPEV( A, W, Z=Z(:,1:N-1) )
+!
+END PROGRAM LA_@(pre)HPEV_ET_EXAMPLE
+ @type !

@@ -1,0 +1,30 @@
+language: c
+group: travis_latest
+dist: xenial
+
+git:
+  depth: 3
+  quiet: true
+
+addons:
+  apt:
+#    sources: ubuntu-toolchain-r-test
+    packages: 
+    - gfortran
+    - liblapack-dev
+
+matrix:
+  include:
+  - os: linux
+#  - os: osx
+#    before_install: brew install gcc > /dev/null
+
+
+install: $TRAVIS_BUILD_DIR/build_L95.sh
+  
+script: 
+- cd $TRAVIS_BUILD_DIR/tests/bin
+- cmake ..
+- cmake --build .
+- ctest --output-on-failure
+

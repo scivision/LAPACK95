@@ -1,0 +1,315 @@
+#
+#  -- LAPACK95 interface driver routine (version 0.0) --
+#     UNI-C, Denmark; Univ. of Tennessee, USA; NAG Ltd., UK
+#     May 31, 1996
+#
+include ../make_dec.inc
+#
+########### ge, General Linear Systems #############
+
+dggsvdet:
+	$(XX)
+
+dgegvet:
+	$(XX)
+
+dgegset:
+	$(XX)
+
+dsbgvet:
+	$(XX)
+
+dspgvet:
+	$(XX)
+
+dgesvdet:
+	$(XX)
+
+dgeevxet:
+	$(XX)
+
+dgeevet:
+	$(XX)
+
+dgeesxet:
+	$(XX)
+
+dgeeset:
+	$(XX)
+
+dstevxet:
+	$(XX)
+
+dstevdet:
+	$(XX)
+
+dstevet:
+	$(XX)
+
+dsbevxet:
+	$(XX)
+
+dsbevdet:
+	$(XX)
+
+dsbevet:
+	$(XX)
+
+dspevxet:
+	$(XX)
+
+dspevdet:
+	$(XX)
+
+dspevet:
+	$(XX)
+
+dggglmet:
+	$(XX)
+
+dgglseet:
+	$(XX)
+
+dgelsxet:
+	$(XX)
+
+dgelsset:
+	$(XX)
+
+dgelset:
+	$(XX)
+
+dspsvxet:
+	$(XX)
+
+dsysvxet:
+	$(XX)
+
+dptsvxet:
+	$(XX)
+
+dpbsvxet:
+	$(XX)
+
+dppsvxet:
+	$(XX)
+
+dposvxet:
+	$(XX)
+
+dgtsvxet:
+	$(XX)
+
+dgbsvxet:
+	$(XX)
+
+dspsvet:
+	$(XX)
+
+dsysvet:
+	$(XX)
+
+dptsvet:
+	$(XX)
+
+dpbsvet:
+	$(XX)
+
+dppsvet:
+	$(XX)
+
+dposvet:
+	$(XX)
+
+dgtsvet:
+	$(XX)
+
+dgbsvet:
+	$(XX)
+
+sgesvxet:
+	$(XX)
+
+cgesvxet:
+	$(XX)
+
+dgesvxet:
+	$(XX)
+
+zgesvxet:
+	$(XX)
+
+sgerfset:
+	$(XX)
+
+cgerfset:
+	$(XX)
+
+dgerfset:
+	$(XX)
+
+zgerfset:
+	$(XX)
+
+sgetriet:
+	$(XX)
+
+dgetriet:
+	$(XX)
+
+cgetriet:
+	$(XX)
+
+zgetriet:
+	$(XX)
+
+sgeequet:
+	$(XX)
+
+cgeequet:
+	$(XX)
+
+dgeequet:
+	$(XX)
+
+zgeequet:
+	$(XX)
+
+sgesvet:
+	 $(XX)
+
+cgesvet:
+	 $(XX)
+
+dgesvet:
+	 $(XX)
+
+zgesvet:
+	 $(XX)
+
+sgetrfet:
+	$(XX)
+
+cgetrfet:
+	$(XX)
+
+dgetrfet:
+	$(XX)
+
+zgetrfet:
+	$(XX)
+
+sgetrset:
+	$(XX)
+
+cgetrset:
+	$(XX)
+
+dgetrset:
+	$(XX)
+
+zgetrset:
+	$(XX)
+
+########### sy/he, Symetric and Hermitian Eigenproblem #####
+
+ssyevet:
+	$(XX)
+
+cheevet:
+	$(XX)
+
+dsyevet:
+	$(XX)
+
+zheevet:
+	$(XX)
+
+ssyevdet:
+	$(XX)
+
+cheevdet:
+	$(XX)
+
+dsyevdet:
+	$(XX)
+
+zheevdet:
+	$(XX)
+
+ssyevxet:
+	$(XX)
+
+cheevxet:
+	$(XX)
+
+dsyevxet:
+	$(XX)
+
+zheevxet:
+	$(XX)
+
+ssygstet:
+	$(XX)
+
+chegstet:
+	$(XX)
+
+dsygstet:
+	$(XX)
+
+zhegstet:
+	$(XX)
+
+ssygvet:
+	$(XX)
+
+chegvet:
+	$(XX)
+
+dsygvet:
+	$(XX)
+
+zhegvet:
+	$(XX)
+
+ssytrdet:
+	$(XX)
+
+chetrdet:
+	$(XX)
+
+dsytrdet:
+	$(XX)
+
+zhetrdet:
+	$(XX)
+
+sorgtret:
+	$(XX)
+
+cungtret:
+	$(XX)
+
+dorgtret:
+	$(XX)
+
+zungtret:
+	$(XX)
+
+########### potrf needed for the sy/he group ###############
+
+spotrfet:
+	$(XX)
+
+cpotrfet:
+	$(XX)
+
+dpotrfet:
+	$(XX)
+
+zpotrfet:
+	$(XX)
+
+clean: 
+	'rm' -f *.o *.l *.o1 *.o2 *.o3 *.o4 *.o5 *.ox *.mod *.res *et *st core

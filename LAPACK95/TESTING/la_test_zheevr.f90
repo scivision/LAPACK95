@@ -1,0 +1,123 @@
+SUBROUTINE LA_TEST_ZHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, &
+     &  IU, ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK, RWORK, LRWORK, &
+     &  IWORK, LIWORK, INFO )
+!
+!  -- LAPACK95 interface driver routine (version 1.1) --
+!     UNI-C, Denmark;
+!     September 11, 1999
+!
+!  .. Use Statements ..
+   USE LA_PRECISION, ONLY: WP => DP
+   USE F95_LAPACK, ONLY: LA_HEEVR
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Scalar Arguments ..
+   INTEGER, INTENT(IN) :: N, LDA, LDZ, IL, IU, LWORK, LIWORK, LRWORK
+   REAL(WP), INTENT(IN) ::  ABSTOL, VL, VU
+   INTEGER, INTENT(INOUT) :: INFO
+   CHARACTER*1, INTENT(IN) :: UPLO, JOBZ, RANGE
+!  .. Array Arguments ..
+   COMPLEX(WP), INTENT(INOUT) :: A(1:LDA,1:N)
+   REAL(WP), INTENT(OUT)::  W(1:N)
+      REAL(WP), INTENT (OUT) :: RWORK(1:LRWORK)   
+   COMPLEX(WP), INTENT(OUT) ::  WORK(1:LWORK), Z(1:LDZ, 1:MAX(1,N))
+   INTEGER, INTENT(OUT) :: IWORK(LIWORK)
+   INTEGER, INTENT(OUT) :: ISUPPZ(2*MAX(1,N)), M
+!  .. Parameters ..
+   CHARACTER(LEN=8),  PARAMETER :: SRNAME = 'LA_HEEVR'
+   CHARACTER(LEN=14), PARAMETER :: SRNAMT = 'LA_TEST_ZHEEVR'
+   LOGICAL LSAME
+   EXTERNAL LSAME
+!  .. Common blocks ..
+   INTEGER :: INFOTC
+   COMMON /LINFO95/ INFOTC
+!  .. Local Scalars ..
+   INTEGER :: I, J, IA1, IA2, IW, IIL, IIU, IZ1, IZ2
+   REAL(WP) :: IVU, IVL
+   CHARACTER*1 :: IUPLO, IJOBZ   
+!  .. Local Arrays ..
+   LOGICAL, SAVE :: CTEST = .TRUE., ETEST = .TRUE.
+!  .. Executable Statements ..
+   IA1 = N; IA2 = N; IUPLO = UPLO; IW = N; IJOBZ = JOBZ
+   IVU=VU; IVL = VL; IIL=IL; IIU = IU; IZ1 = MAX(1,N); IZ2 = N
+   I = INFO / 100; J = INFO - I*100
+   SELECT CASE(I)
+     CASE (1)
+       IA2 = IA1 - 1
+     CASE (2)
+       IW = IA1 - 1
+     CASE (3)
+       IJOBZ = 'T'
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+&        M=M, ISUPPZ=ISUPPZ, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (4)
+       IUPLO = 'T'; IJOBZ='N'
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), UPLO=IUPLO, &
+&        M=M, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (5)
+       IVU = IVL - 1
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+     &  VL=IVL, VU=IVU, M=M, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (6)
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+     &   IVL, IVU, IIL, IIU, M, ISUPPZ, ABSTOL, INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (7)
+       IIU = IIL - 1
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ,  IUPLO, &
+     &  IL=IIL, IU=IIU, M=M, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (8)
+       IIU = IA1 + 1
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+     &  IL=IIL, IU=IIU, M=M, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE (10)
+       IJOBZ='N'
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+&         M=M, ISUPPZ=ISUPPZ, ABSTOL=ABSTOL, INFO=INFO )
+       CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+       RETURN
+     CASE(:-1,9,11:)
+       CALL UESTOP(SRNAMT)
+   END SELECT
+
+   IF (LSAME(RANGE,'A')) THEN
+     IF (LSAME(JOBZ, 'V')) THEN
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ,  IUPLO, &
+&        M=M, ISUPPZ=ISUPPZ, ABSTOL=ABSTOL, INFO=INFO )
+      ELSE
+       CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), UPLO=IUPLO, &
+     &   M=M, ABSTOL=ABSTOL, INFO=INFO )
+     END IF
+   ELSE
+     IF (LSAME(RANGE, 'V')) THEN
+       IF (LSAME(JOBZ, 'V')) THEN
+         CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+&          IVL, IVU,  M=M, ISUPPZ=ISUPPZ, ABSTOL=ABSTOL, INFO=INFO )
+       ELSE
+         CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), UPLO=IUPLO,  &
+     &     VL=IVL, VU=IVU,  M=M, ABSTOL=ABSTOL, INFO=INFO )
+       END IF
+     ELSE
+       IF (LSAME(JOBZ, 'V')) THEN
+         CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), IJOBZ, IUPLO, &
+     &     IL=IIL, IU=IIU, M=M, ISUPPZ=ISUPPZ, ABSTOL=ABSTOL, INFO=INFO )
+       ELSE
+         CALL LA_HEEVR( A(1:IA1,1:IA2), W(1 :IW), UPLO=IUPLO, &
+     &     IL=IIL, IU=IIU, M=M, ABSTOL=ABSTOL, INFO=INFO )
+       ENDIF
+     END IF
+   ENDIF
+   IF (N/=0) Z(1:IA1, 1:M) = A(1:IA1, 1:M)
+   CALL LA_AUX_AA01( I, CTEST, ETEST, SRNAMT )
+END SUBROUTINE LA_TEST_ZHEEVR

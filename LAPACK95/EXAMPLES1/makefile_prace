@@ -1,0 +1,185 @@
+# Makefile.
+# FFLAGS = -O -I./ -I/usr/local/lib/lapack95_modules
+# LIBS   = /usr/local/lib/lapack95.a
+# OBJS0   = f77_blas.o f90_blas.o f90_rcf.o dlagsy.o cpu_time.o
+.SUFFIXES : .o .f .f90
+
+.f90.o:
+	$(FC90) -c $(FFLAGS) $<
+
+.f.o:
+	$(FC77) -c -O $<
+
+FC90   = f95 -ieee=full
+FC77   = f95 -ieee=full
+FFLAGS = -O -I./ -I/usr/local/lib/minka/LAPACK90/lapack90_modules
+LIBS   = /usr/local/lib/minka/LAPACK90/lapack90.a \
+         /usr/local/lib/LAPACK3/lapack_LINUXi386.a \
+         /usr/local/lib/LAPACK3/blas_LINUXi386.a
+
+OBJS0   = f77_blas.o f90_blas.o f90_rcf.o dlagsy.o
+OBJS1   = la_dtrsm.o la_dsyrk.o la_dgemm.o dsyrkg.o \
+	rsyrk.o rgemm.o rtrsm.o rpptrf.o rsysvp.o rsytrf.o swp.o upd.o \
+        swp1.o downd.o downd1.o
+OBJS    = $(OBJS0) $(OBJS1)
+
+library: $(OBJS)
+	ar cr library.a $(OBJS)
+	ranlib library.a
+
+#XX = $(FC90) -o $@ $(FFLAGS) $@.f90 library.a $(LIBS)
+XX = $(FC90) -o $@ $(FFLAGS) $@.f90 $(LIBS)
+gelsep: 
+	$(XX)
+
+gelssep: 
+	$(XX)
+
+gglseep: 
+	$(XX)
+
+ggglmep: 
+	$(XX)
+
+syevep: 
+	$(XX)
+
+hpevep:
+	$(XX)
+
+sbevep: 
+	$(XX)
+
+stevep: 
+	$(XX)
+
+geesep:
+	$(XX)
+
+geevep:
+	$(XX)
+
+sygvep: 
+	$(XX)
+
+sbgvep:
+	$(XX)
+
+gesvdep:
+	$(XX)
+
+ggsvdep: 
+	$(XX)
+
+gesvep:	
+	$(XX)
+
+gesvxep: 
+	$(XX)
+
+gbsvep: 
+	$(XX)
+
+gbsvxep:
+	$(XX)
+
+syevxep: 
+	$(XX)
+
+sbevxep: 
+	$(XX)
+
+stevxep:
+	$(XX)
+
+gtsvep:
+	$(XX)
+
+gtsvxep:
+	$(XX)
+
+hpevxep:
+	$(XX)
+
+posvep:
+	$(XX)
+
+posvxep:
+	$(XX)
+
+ppsvep:
+	$(XX)
+
+ppsvxep: 
+	$(XX)
+
+geesxep:
+	$(XX)
+
+geevxep: 
+	$(XX)
+
+sygvxep:
+	$(XX)
+
+sbgvxep:
+	$(XX)
+
+pbsvep: 
+	$(XX)
+
+pbsvxep: 
+	$(XX)
+
+ptsvep: 
+	$(XX)
+
+ptsvxep: 
+	$(XX)
+
+sysvep: 
+	$(XX)
+
+hesvep: 
+	$(XX)
+
+sysvxep: 
+	$(XX)
+
+spsvep: 
+	$(XX)
+
+spsvxep: 
+	$(XX)
+
+gelsyep: 
+	$(XX)
+
+syevrep:
+	$(XX)
+
+stevrep: 
+	$(XX)
+
+ggesep:
+	$(XX)
+
+ggesxep: 
+	$(XX)
+
+ggevep:
+	$(XX)
+
+ggevxep:
+	$(XX)
+
+hpgvep:
+	$(XX)
+
+hpgvxep:
+	$(XX)
+
+clean:
+	'rm' -f *.o *.mod *.a core *ep
+
+

@@ -1,0 +1,90 @@
+@extract -b incpath.inc
+@extract -b @(incd)/type.inc type=@(@type)
+@ROUT ggglm
+PROGRAM LA_@(pre)GGGLM_EXAMPLE
+@extract -b @(incd)/header.inc -case0
+!  .. Use Statements
+   USE LA_PRECISION, ONLY: WP => @(upr)P
+   USE F90_LAPACK, ONLY: LA_GGGLM
+!  .. Implicit Statement ..
+   IMPLICIT NONE
+!  .. Parameters ..
+ @type sreal dreal
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(8(1X,F10.2))'
+ @type scplx dcplx
+      CHARACTER(LEN=*), PARAMETER :: FMT = '(4(1X,1H(,F7.2,1H,,F7.2,1H):))'
+ @type !
+   INTEGER, PARAMETER :: NIN=5, NOUT=6
+!  .. Local Scalars ..
+   INTEGER  :: I, INFO, M, N, P
+!  .. Local Arrays ..
+   REAL(WP), ALLOCATABLE :: AA(:,:), BB(:,:), DD(:)
+   @(type)(WP), ALLOCATABLE :: A(:, :), B(:,:), D(:), X(:), Y(:)
+!  .. Intrinsic Functions ..
+   INTRINSIC MATMUL
+!  .. Executable Statements ..
+   WRITE (NOUT,*) '@(pre)GGGLM Example Program Results'
+   READ ( NIN, * )   ! Skip heading in data file
+   READ ( NIN, * ) M, N, P
+   PRINT *, 'M = ', M, ' N = ', N, ' P = ', P
+   ALLOCATE ( A(N,M), AA(N,M), B(N,P), BB(N,P), D(N), DD(N), X(M), Y(P) )
+   READ (NIN,*) AA, BB, DD
+   A = AA; B=BB; D = DD
+   WRITE(NOUT,*) 'The matrix A'
+   DO I = 1, N; WRITE (NOUT,FMT) A(I,:); ENDDO
+   WRITE(NOUT,*) 'The RHS matrix B:'
+   DO I = 1, N; WRITE (NOUT,FMT) B(I,:); ENDDO
+   WRITE(NOUT,*) 'The vector D:'; WRITE (NOUT,FMT) D
+!
+   WRITE ( NOUT, * )'--------------------------------------------'
+   WRITE ( NOUT, * )
+   WRITE ( NOUT, * )'Details of LA_@(pre)GGGLM LAPACK Subroutine Results.'
+   WRITE ( NOUT, * )
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B, D, X, Y)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B, D, X, Y)
+   WRITE(NOUT,*)' MATMUL(AA, X) + MATMUL(BB, Y), X, Y'
+   WRITE (NOUT,FMT) MATMUL( AA, X ) + MATMUL( BB, Y )
+   WRITE(NOUT,FMT) X; WRITE(NOUT,FMT) Y
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B, D, X, Y, INFO)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B, D, X, Y, INFO)
+   WRITE(NOUT,*)'INFO = ', INFO, ' MATMUL(AA, X) + MATMUL(BB, Y), X, Y'
+   WRITE (NOUT,FMT) MATMUL( AA, X ) + MATMUL( BB, Y )
+   WRITE(NOUT,FMT) X; WRITE(NOUT,FMT) Y
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A(:,1:M-1), B, D, X, Y, INFO)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A(:,1:M-1), B, D, X, Y, INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B(1:1,:), D, X, Y, INFO)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B(1:1,:), D, X, Y, INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B, D(1:1), X, Y, INFO)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B, D(1:1), X, Y, INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B, D, X(1:1), Y, INFO)'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B, D, X(1:1), Y, INFO)
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+   WRITE (NOUT,*)
+   WRITE (NOUT,*) 'CALL LA_GGGLM (A, B, D, X, Y(1:1))'
+   A = AA; B=BB; D = DD
+   CALL LA_GGGLM (A, B, D, X, Y(1:1))
+   WRITE(NOUT,*)'INFO = ', INFO
+!
+END!PROGRAM LA_@(pre)GGGLM_EXAMPLE
