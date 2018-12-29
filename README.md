@@ -56,3 +56,25 @@ add_subdirectory(LAPACK95)
 add_executable(myexe ${CMAKE_CURRENT_SOURCE_DIR}/myexe.f90)
 target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
 ```
+
+## Example program
+```fortran
+program ex
+    ! Double precision
+    use la_precision, only: wp => dp
+    use f95_lapack, only: la_gesv
+
+    real(wp) :: A(3,3), b(3)
+
+    call random_number(A)
+    b(:) = 3*A(:,1) + 2*A(:,2) - A(:,3)
+    
+    ! Solve Ax=b, overwrite b with solution
+    call la_gesv(A,b)
+
+    write(*,*) b
+end program
+
+! Output (exact: 3 2 -1):
+! 2.9999999999999978        2.0000000000000018       -1.0000000000000004
+```
