@@ -17,8 +17,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/source_list.cmake)
 
 add_library(lapack95 ${srcdir}/f77_lapack_single_double_complex_dcomplex.f90
                      ${srcdir}/f95_lapack_single_double_complex_dcomplex.f90
-                     ${routine_sources}
-)
+                     ${routine_sources})
 
 add_dependencies(lapack95 auxmod)
 target_link_libraries(lapack95 auxmod)
