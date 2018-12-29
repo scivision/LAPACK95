@@ -1,0 +1,108 @@
+# Copied from LAPACK95/SRC/makefile
+set(routine_sources
+${srcdir}/la_erinfo.f90 ${srcdir}/la_ws_gels.f90 ${srcdir}/la_ws_gelss.f90
+${srcdir}/la_sgesv.f90 ${srcdir}/la_sgesv1.f90 ${srcdir}/la_sgesvx.f90 ${srcdir}/la_sgesvx1.f90
+	${srcdir}/la_sgetrf.f90 ${srcdir}/la_slagge.f90 ${srcdir}/la_slange.f90 ${srcdir}/la_slange1.f90
+	${srcdir}/la_sgetri.f90 ${srcdir}/la_sgetrs.f90 ${srcdir}/la_sgetrs1.f90 ${srcdir}/la_sgeequ.f90
+	${srcdir}/la_sgerfs.f90 ${srcdir}/la_sgerfs1.f90 ${srcdir}/la_ssytrd.f90 ${srcdir}/la_ssygst.f90
+	${srcdir}/la_sorgtr.f90 ${srcdir}/la_spotrf.f90 ${srcdir}/la_sgbtrf.f90 ${srcdir}/la_slamch.f90
+	${srcdir}/la_sgbsv.f90 ${srcdir}/la_sgbsv1.f90 ${srcdir}/la_sgbsvx.f90 ${srcdir}/la_sgbsvx1.f90
+	${srcdir}/la_sgtsv.f90 ${srcdir}/la_sgtsv1.f90 ${srcdir}/la_sgtsvx.f90 ${srcdir}/la_sgtsvx1.f90
+	${srcdir}/la_sposv.f90 ${srcdir}/la_sposv1.f90 ${srcdir}/la_sposvx.f90 ${srcdir}/la_sposvx1.f90
+	${srcdir}/la_sppsv.f90 ${srcdir}/la_sppsv1.f90 ${srcdir}/la_sppsvx.f90 ${srcdir}/la_sppsvx1.f90
+	${srcdir}/la_spbsv.f90 ${srcdir}/la_spbsv1.f90 ${srcdir}/la_spbsvx.f90 ${srcdir}/la_spbsvx1.f90
+	${srcdir}/la_sptsv.f90 ${srcdir}/la_sptsv1.f90 ${srcdir}/la_sptsvx.f90 ${srcdir}/la_sptsvx1.f90
+	${srcdir}/la_ssysv.f90 ${srcdir}/la_ssysv1.f90 ${srcdir}/la_ssysvx.f90 ${srcdir}/la_ssysvx1.f90
+	${srcdir}/la_sspsv.f90 ${srcdir}/la_sspsv1.f90 ${srcdir}/la_sspsvx.f90 ${srcdir}/la_sspsvx1.f90
+	${srcdir}/la_sgels.f90 ${srcdir}/la_sgels1.f90 ${srcdir}/la_sgelsx.f90 ${srcdir}/la_sgelsx1.f90
+	${srcdir}/la_sgelss.f90 ${srcdir}/la_sgelss1.f90 ${srcdir}/la_sgglse.f90 ${srcdir}/la_sggglm.f90
+	${srcdir}/la_ssyev.f90 ${srcdir}/la_ssyevd.f90 ${srcdir}/la_ssyevx.f90 ${srcdir}/la_sspev.f90
+	${srcdir}/la_sspevd.f90 ${srcdir}/la_sspevx.f90 ${srcdir}/la_ssbev.f90 ${srcdir}/la_ssbevd.f90
+	${srcdir}/la_ssbevx.f90 ${srcdir}/la_sstev.f90 ${srcdir}/la_sstevd.f90 ${srcdir}/la_sstevx.f90
+	${srcdir}/la_sgees.f90 ${srcdir}/la_sgeesx.f90 ${srcdir}/la_sgeev.f90 ${srcdir}/la_sgeevx.f90
+	${srcdir}/la_sgesvd.f90 ${srcdir}/la_ssygv.f90 ${srcdir}/la_sspgv.f90 ${srcdir}/la_ssbgv.f90
+	${srcdir}/la_sgegs.f90 ${srcdir}/la_sgegv.f90 ${srcdir}/la_sggsvd.f90 ${srcdir}/la_sgelsy.f90
+	${srcdir}/la_sgelsy1.f90 ${srcdir}/la_sspgvd.f90 ${srcdir}/la_ssbgvd.f90 ${srcdir}/la_ssygvd.f90
+	${srcdir}/la_ssbgvx.f90 ${srcdir}/la_sspgvx.f90 ${srcdir}/la_sggev.f90 ${srcdir}/la_sgges.f90
+	${srcdir}/la_sstevr.f90 ${srcdir}/la_sgelsd.f90 ${srcdir}/la_sgelsd1.f90 ${srcdir}/la_ssyevr.f90
+	${srcdir}/la_sggevx.f90 ${srcdir}/la_ssygvx.f90 ${srcdir}/la_sggesx.f90 ${srcdir}/la_sgesdd.f90
+${srcdir}/la_dgesv.f90 ${srcdir}/la_dgesv1.f90 ${srcdir}/la_dgesvx.f90 ${srcdir}/la_dgesvx1.f90
+	${srcdir}/la_dgetrf.f90 ${srcdir}/la_dlagge.f90 ${srcdir}/la_dlange.f90 ${srcdir}/la_dlange1.f90
+	${srcdir}/la_dgetri.f90 ${srcdir}/la_dgetrs.f90 ${srcdir}/la_dgetrs1.f90 ${srcdir}/la_dgeequ.f90
+	${srcdir}/la_dgerfs.f90 ${srcdir}/la_dgerfs1.f90 ${srcdir}/la_dsytrd.f90 ${srcdir}/la_dsygst.f90
+	${srcdir}/la_dorgtr.f90 ${srcdir}/la_dpotrf.f90 ${srcdir}/la_dgbtrf.f90 ${srcdir}/la_dlamch.f90
+	${srcdir}/la_dgbsv.f90 ${srcdir}/la_dgbsv1.f90 ${srcdir}/la_dgbsvx.f90 ${srcdir}/la_dgbsvx1.f90
+	${srcdir}/la_dgtsv.f90 ${srcdir}/la_dgtsv1.f90 ${srcdir}/la_dgtsvx.f90 ${srcdir}/la_dgtsvx1.f90
+	${srcdir}/la_dposv.f90 ${srcdir}/la_dposv1.f90 ${srcdir}/la_dposvx.f90 ${srcdir}/la_dposvx1.f90
+	${srcdir}/la_dppsv.f90 ${srcdir}/la_dppsv1.f90 ${srcdir}/la_dppsvx.f90 ${srcdir}/la_dppsvx1.f90
+	${srcdir}/la_dpbsv.f90 ${srcdir}/la_dpbsv1.f90 ${srcdir}/la_dpbsvx.f90 ${srcdir}/la_dpbsvx1.f90
+	${srcdir}/la_dptsv.f90 ${srcdir}/la_dptsv1.f90 ${srcdir}/la_dptsvx.f90 ${srcdir}/la_dptsvx1.f90
+	${srcdir}/la_dsysv.f90 ${srcdir}/la_dsysv1.f90 ${srcdir}/la_dsysvx.f90 ${srcdir}/la_dsysvx1.f90
+	${srcdir}/la_dspsv.f90 ${srcdir}/la_dspsv1.f90 ${srcdir}/la_dspsvx.f90 ${srcdir}/la_dspsvx1.f90
+	${srcdir}/la_dgels.f90 ${srcdir}/la_dgels1.f90 ${srcdir}/la_dgelsx.f90 ${srcdir}/la_dgelsx1.f90
+	${srcdir}/la_dgelss.f90 ${srcdir}/la_dgelss1.f90 ${srcdir}/la_dgglse.f90 ${srcdir}/la_dggglm.f90
+	${srcdir}/la_dsyev.f90 ${srcdir}/la_dsyevd.f90 ${srcdir}/la_dsyevx.f90 ${srcdir}/la_dspev.f90
+	${srcdir}/la_dspevd.f90 ${srcdir}/la_dspevx.f90 ${srcdir}/la_dsbev.f90 ${srcdir}/la_dsbevd.f90
+	${srcdir}/la_dsbevx.f90 ${srcdir}/la_dstev.f90 ${srcdir}/la_dstevd.f90 ${srcdir}/la_dstevx.f90
+	${srcdir}/la_dgees.f90 ${srcdir}/la_dgeesx.f90 ${srcdir}/la_dgeev.f90 ${srcdir}/la_dgeevx.f90
+	${srcdir}/la_dgesvd.f90 ${srcdir}/la_dsygv.f90 ${srcdir}/la_dspgv.f90 ${srcdir}/la_dsbgv.f90
+	${srcdir}/la_dgegs.f90 ${srcdir}/la_dgegv.f90 ${srcdir}/la_dggsvd.f90 ${srcdir}/la_dgelsy.f90
+	${srcdir}/la_dgelsy1.f90 ${srcdir}/la_dspgvd.f90 ${srcdir}/la_dsbgvd.f90 ${srcdir}/la_dsygvd.f90
+	${srcdir}/la_dsbgvx.f90 ${srcdir}/la_dspgvx.f90 ${srcdir}/la_dggev.f90 ${srcdir}/la_dgges.f90
+	${srcdir}/la_dstevr.f90 ${srcdir}/la_dgelsd.f90 ${srcdir}/la_dgelsd1.f90 ${srcdir}/la_dsyevr.f90
+	${srcdir}/la_dggevx.f90 ${srcdir}/la_dsygvx.f90 ${srcdir}/la_dggesx.f90 ${srcdir}/la_dgesdd.f90
+${srcdir}/la_cgesv.f90 ${srcdir}/la_cgesv1.f90 ${srcdir}/la_cgesvx.f90 ${srcdir}/la_cgesvx1.f90
+	${srcdir}/la_cgetrf.f90 ${srcdir}/la_clagge.f90 ${srcdir}/la_clange.f90 ${srcdir}/la_clange1.f90
+	${srcdir}/la_cgetri.f90 ${srcdir}/la_cgetrs.f90 ${srcdir}/la_cgetrs1.f90 ${srcdir}/la_cgeequ.f90
+	${srcdir}/la_cgerfs.f90 ${srcdir}/la_cgerfs1.f90 ${srcdir}/la_chetrd.f90 ${srcdir}/la_chegst.f90
+	${srcdir}/la_cungtr.f90 ${srcdir}/la_cpotrf.f90 ${srcdir}/la_cgbtrf.f90
+	${srcdir}/la_cgbsv.f90 ${srcdir}/la_cgbsv1.f90 ${srcdir}/la_cgbsvx.f90 ${srcdir}/la_cgbsvx1.f90
+	${srcdir}/la_cgtsv.f90 ${srcdir}/la_cgtsv1.f90 ${srcdir}/la_cgtsvx.f90 ${srcdir}/la_cgtsvx1.f90
+	${srcdir}/la_cposv.f90 ${srcdir}/la_cposv1.f90 ${srcdir}/la_cposvx.f90 ${srcdir}/la_cposvx1.f90
+	${srcdir}/la_cppsv.f90 ${srcdir}/la_cppsv1.f90 ${srcdir}/la_cppsvx.f90 ${srcdir}/la_cppsvx1.f90
+	${srcdir}/la_cpbsv.f90 ${srcdir}/la_cpbsv1.f90 ${srcdir}/la_cpbsvx.f90 ${srcdir}/la_cpbsvx1.f90
+	${srcdir}/la_cptsv.f90 ${srcdir}/la_cptsv1.f90 ${srcdir}/la_cptsvx.f90 ${srcdir}/la_cptsvx1.f90
+	${srcdir}/la_csysv.f90 ${srcdir}/la_csysv1.f90 ${srcdir}/la_csysvx.f90 ${srcdir}/la_csysvx1.f90
+	${srcdir}/la_cspsv.f90 ${srcdir}/la_cspsv1.f90 ${srcdir}/la_cspsvx.f90 ${srcdir}/la_cspsvx1.f90
+	${srcdir}/la_chesv.f90 ${srcdir}/la_chesv1.f90 ${srcdir}/la_chesvx.f90 ${srcdir}/la_chesvx1.f90
+	${srcdir}/la_chpsv.f90 ${srcdir}/la_chpsv1.f90 ${srcdir}/la_chpsvx.f90 ${srcdir}/la_chpsvx1.f90
+	${srcdir}/la_cgels.f90 ${srcdir}/la_cgels1.f90 ${srcdir}/la_cgelsx.f90 ${srcdir}/la_cgelsx1.f90
+	${srcdir}/la_cgelss.f90 ${srcdir}/la_cgelss1.f90 ${srcdir}/la_cgglse.f90 ${srcdir}/la_cggglm.f90
+	${srcdir}/la_cheev.f90 ${srcdir}/la_cheevd.f90 ${srcdir}/la_cheevx.f90 ${srcdir}/la_chpev.f90
+	${srcdir}/la_chpevd.f90 ${srcdir}/la_chpevx.f90 ${srcdir}/la_chbev.f90 ${srcdir}/la_chbevd.f90
+	${srcdir}/la_chbevx.f90 ${srcdir}/la_chbgvx.f90 ${srcdir}/la_chpgvx.f90
+	${srcdir}/la_cgees.f90 ${srcdir}/la_cgeesx.f90 ${srcdir}/la_cgeev.f90 ${srcdir}/la_cgeevx.f90
+	${srcdir}/la_cgesvd.f90 ${srcdir}/la_chegv.f90 ${srcdir}/la_chpgv.f90 ${srcdir}/la_chbgv.f90
+	${srcdir}/la_cgegs.f90 ${srcdir}/la_cgegv.f90 ${srcdir}/la_cggsvd.f90 ${srcdir}/la_cgelsy.f90
+	${srcdir}/la_cgelsy1.f90 ${srcdir}/la_chpgvd.f90 ${srcdir}/la_chbgvd.f90 ${srcdir}/la_chegvd.f90
+	${srcdir}/la_cggev.f90 ${srcdir}/la_cgges.f90 ${srcdir}/la_cgelsd.f90 ${srcdir}/la_cgelsd1.f90
+	${srcdir}/la_cheevr.f90 ${srcdir}/la_cggevx.f90 ${srcdir}/la_chegvx.f90 ${srcdir}/la_cggesx.f90
+	${srcdir}/la_cgesdd.f90
+${srcdir}/la_zgesv.f90 ${srcdir}/la_zgesv1.f90 ${srcdir}/la_zgesvx.f90 ${srcdir}/la_zgesvx1.f90
+	${srcdir}/la_zgetrf.f90 ${srcdir}/la_zlagge.f90 ${srcdir}/la_zlange.f90 ${srcdir}/la_zlange1.f90
+	${srcdir}/la_zgetri.f90 ${srcdir}/la_zgetrs.f90 ${srcdir}/la_zgetrs1.f90 ${srcdir}/la_zgeequ.f90
+	${srcdir}/la_zgerfs.f90 ${srcdir}/la_zgerfs1.f90 ${srcdir}/la_zhetrd.f90 ${srcdir}/la_zhegst.f90
+	${srcdir}/la_zungtr.f90 ${srcdir}/la_zpotrf.f90 ${srcdir}/la_zgbtrf.f90
+	${srcdir}/la_zgbsv.f90 ${srcdir}/la_zgbsv1.f90 ${srcdir}/la_zgbsvx.f90 ${srcdir}/la_zgbsvx1.f90
+	${srcdir}/la_zgtsv.f90 ${srcdir}/la_zgtsv1.f90 ${srcdir}/la_zgtsvx.f90 ${srcdir}/la_zgtsvx1.f90
+	${srcdir}/la_zposv.f90 ${srcdir}/la_zposv1.f90 ${srcdir}/la_zposvx.f90 ${srcdir}/la_zposvx1.f90
+	${srcdir}/la_zppsv.f90 ${srcdir}/la_zppsv1.f90 ${srcdir}/la_zppsvx.f90 ${srcdir}/la_zppsvx1.f90
+	${srcdir}/la_zpbsv.f90 ${srcdir}/la_zpbsv1.f90 ${srcdir}/la_zpbsvx.f90 ${srcdir}/la_zpbsvx1.f90
+	${srcdir}/la_zptsv.f90 ${srcdir}/la_zptsv1.f90 ${srcdir}/la_zptsvx.f90 ${srcdir}/la_zptsvx1.f90
+	${srcdir}/la_zsysv.f90 ${srcdir}/la_zsysv1.f90 ${srcdir}/la_zsysvx.f90 ${srcdir}/la_zsysvx1.f90
+	${srcdir}/la_zspsv.f90 ${srcdir}/la_zspsv1.f90 ${srcdir}/la_zspsvx.f90 ${srcdir}/la_zspsvx1.f90
+	${srcdir}/la_zhesv.f90 ${srcdir}/la_zhesv1.f90 ${srcdir}/la_zhesvx.f90 ${srcdir}/la_zhesvx1.f90
+	${srcdir}/la_zhpsv.f90 ${srcdir}/la_zhpsv1.f90 ${srcdir}/la_zhpsvx.f90 ${srcdir}/la_zhpsvx1.f90
+	${srcdir}/la_zgels.f90 ${srcdir}/la_zgels1.f90 ${srcdir}/la_zgelsx.f90 ${srcdir}/la_zgelsx1.f90
+	${srcdir}/la_zgelss.f90 ${srcdir}/la_zgelss1.f90 ${srcdir}/la_zgglse.f90 ${srcdir}/la_zggglm.f90
+	${srcdir}/la_zheev.f90 ${srcdir}/la_zheevd.f90 ${srcdir}/la_zheevx.f90 ${srcdir}/la_zhpev.f90
+	${srcdir}/la_zhpevd.f90 ${srcdir}/la_zhpevx.f90 ${srcdir}/la_zhbev.f90 ${srcdir}/la_zhbevd.f90
+	${srcdir}/la_zhbevx.f90 ${srcdir}/la_zhbgvx.f90 ${srcdir}/la_zhpgvx.f90
+	${srcdir}/la_zgees.f90 ${srcdir}/la_zgeesx.f90 ${srcdir}/la_zgeev.f90 ${srcdir}/la_zgeevx.f90
+	${srcdir}/la_zgesvd.f90 ${srcdir}/la_zhegv.f90 ${srcdir}/la_zhpgv.f90 ${srcdir}/la_zhbgv.f90
+	${srcdir}/la_zgegs.f90 ${srcdir}/la_zgegv.f90 ${srcdir}/la_zggsvd.f90 ${srcdir}/la_zgelsy.f90
+	${srcdir}/la_zgelsy1.f90 ${srcdir}/la_zhpgvd.f90 ${srcdir}/la_zhbgvd.f90 ${srcdir}/la_zhegvd.f90
+	${srcdir}/la_zggev.f90 ${srcdir}/la_zgges.f90 ${srcdir}/la_zgelsd.f90 ${srcdir}/la_zgelsd1.f90
+	${srcdir}/la_zheevr.f90 ${srcdir}/la_zggevx.f90 ${srcdir}/la_zhegvx.f90 ${srcdir}/la_zggesx.f90
+	${srcdir}/la_zgesdd.f90
+)
