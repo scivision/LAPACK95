@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/scivision/LAPACK95.svg?branch=master)](https://travis-ci.com/scivision/LAPACK95)
 
 # LAPACK95
-Archive / mirror of Netlib LAPACK95
+Archive / mirror of Netlib LAPACK95, with added cmake support.
 
 
 ## Build (makefiles)
