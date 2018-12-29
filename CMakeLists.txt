@@ -9,9 +9,9 @@ endif()
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR}/LAPACK95/SRC)
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+set(LAPACK95_INCLUDE_DIR ${CMAKE_Fortran_MODULE_DIRECTORY})
 
 add_library(auxmod ${srcdir}/la_auxmod.f90)
-set(LAPACK95_INCLUDE_DIR ${CMAKE_Fortran_MODULE_DIRECTORY})
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/source_list.cmake)
 
