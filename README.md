@@ -43,7 +43,7 @@ gfortran yourprogram.f90 -I/your/install/prefix/include -llapack -llapack95
 (assuming `/your/install/prefix/lib` is part of `LD_LIBRARY_PATH`).
 
 ## Use in a cmake project
-This library can be used inside a cmake project by adding this repository as a subdirectory (e.g. with `git submodule add`) and then using a `CMakeLists.txt` along the lines of
+This library can be used inside a cmake project by adding this repository as a subdirectory (e.g. with `git submodule add` or simply `git clone`) and using a `CMakeLists.txt` along the lines of
 ```cmake
 cmake_minimum_required(VERSION 3.0)
 
