@@ -13,7 +13,7 @@
 
 OPTS0    = -O3 -fno-trapping-math -std=legacy 
 #-u -V -dcfuns -dusty -ieee=full
-MODLIB   = -I./../lapack95_modules
+MODLIB   = -I./../include
 OPTS1    = -c $(OPTS0)
 OPTS3    = $(OPTS1) $(MODLIB)
 OPTL     = -o 

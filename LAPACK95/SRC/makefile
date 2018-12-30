@@ -5,6 +5,8 @@
 #
 include ../make.inc
 
+%.o: %.mod
+
 SOBJSS   = la_auxmod.o $(SOBMOD) $(OBJAU) $(SOBJS)
 DOBJSS   = la_auxmod.o $(DOBMOD) $(OBJAU) $(DOBJS)
 SCOBJS   = la_auxmod.o $(SCOBMOD) $(OBJAU) $(SOBJS) $(COBJS)
@@ -137,9 +139,7 @@ single: $(SOBJSS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(SOBJSS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_single.o
 
@@ -147,9 +147,7 @@ double: $(DOBJSS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(DOBJSS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_double.o
 
@@ -157,9 +155,7 @@ single_double: $(SDOBJS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(SDOBJS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_single_double.o
 
@@ -167,9 +163,7 @@ single_complex: $(SCOBJS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(SCOBJS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_single_complex.o
 
@@ -177,9 +171,7 @@ double_dcomplex: $(DZOBJS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(DZOBJS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_double_dcomplex.o
 
@@ -187,9 +179,7 @@ single_double_complex: $(SCDOBJS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(SCDOBJS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	cp *.mod ../lapack95_modules/
+	cp *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_single_double_complex.o
 
@@ -197,11 +187,9 @@ single_double_complex_dcomplex: $(SCDZOBJS)
 	$(RM) ../lapack95.a
 	ar cr ../lapack95.a $(SCDZOBJS)
 	ranlib ../lapack95.a
-	$(RM) -r ../lapack95_modules
-	mkdir ../lapack95_modules
-	'cp' *.mod ../lapack95_modules/
+	'cp' *.mod ../include/
 	$(RM) f77_lapack.* f95_lapack.*
 	$(RM) *_lapack_single_double_complex_dcomplex.o
 
 clean: 
-	$(RM) *.a *.o *.mod *.l core
+	$(RM) ../*.a *.o ../include/*.mod *.l core

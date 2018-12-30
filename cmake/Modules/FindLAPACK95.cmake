@@ -58,8 +58,7 @@ else()
                NAMES lapack95.a)
 
   find_path(LAPACK95_INCLUDE_DIR
-            NAMES f95_lapack.mod
-            PATH_SUFFIXES lapack95_modules)
+            NAMES f95_lapack.mod)
 
 endif()
 
