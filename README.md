@@ -43,18 +43,29 @@ gfortran yourprogram.f90 -I/your/install/prefix/include -llapack -llapack95
 (assuming `/your/install/prefix/lib` is part of `LD_LIBRARY_PATH`).
 
 ## Use in a cmake project
-This library can be used inside a cmake project by adding this repository as a subdirectory (e.g. with `git submodule add` or simply `git clone`) and using a `CMakeLists.txt` along the lines of
+This library can be used inside a cmake project by adding this repository with `add_subdirectory`. One can for example use [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html):
 ```cmake
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 
 project(myproject Fortran)
 
 find_package(LAPACK REQUIRED)
 
-add_subdirectory(LAPACK95)
+include(FetchContent)
+FetchContent_Declare(
+    lapack95
+    GIT_REPOSITORY https://github.com/scivision/LAPACK95.git
+)
+
+FetchContent_GetProperties(lapack95)
+if(NOT lapack95_POPULATED)
+    FetchContent_Populate(lapack95)
+    add_subdirectory(${lapack95_SOURCE_DIR})
+endif()
 
 add_executable(myexe ${CMAKE_CURRENT_SOURCE_DIR}/myexe.f90)
 target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
+
 ```
 
 ## Example program
