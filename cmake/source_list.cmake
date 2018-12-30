@@ -1,6 +1,8 @@
 # Copied from LAPACK95/SRC/makefile
-set(routine_sources
-${srcdir}/la_erinfo.f90 ${srcdir}/la_ws_gels.f90 ${srcdir}/la_ws_gelss.f90
+set(lapack95_sources
+${srcdir}/f77_lapack_single_double_complex_dcomplex.f90
+${srcdir}/f95_lapack_single_double_complex_dcomplex.f90
+${srcdir}/la_auxmod.f90 ${srcdir}/la_erinfo.f90 ${srcdir}/la_ws_gels.f90 ${srcdir}/la_ws_gelss.f90
 ${srcdir}/la_sgesv.f90 ${srcdir}/la_sgesv1.f90 ${srcdir}/la_sgesvx.f90 ${srcdir}/la_sgesvx1.f90
 	${srcdir}/la_sgetrf.f90 ${srcdir}/la_slagge.f90 ${srcdir}/la_slange.f90 ${srcdir}/la_slange1.f90
 	${srcdir}/la_sgetri.f90 ${srcdir}/la_sgetrs.f90 ${srcdir}/la_sgetrs1.f90 ${srcdir}/la_sgeequ.f90

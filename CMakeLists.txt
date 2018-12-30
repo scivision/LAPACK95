@@ -11,16 +11,10 @@ set(srcdir ${CMAKE_CURRENT_SOURCE_DIR}/LAPACK95/SRC)
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 set(LAPACK95_INCLUDE_DIR ${CMAKE_Fortran_MODULE_DIRECTORY})
 
-add_library(auxmod ${srcdir}/la_auxmod.f90)
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/source_list.cmake)
 
-add_library(lapack95 ${srcdir}/f77_lapack_single_double_complex_dcomplex.f90
-                     ${srcdir}/f95_lapack_single_double_complex_dcomplex.f90
-                     ${routine_sources})
+add_library(lapack95 ${lapack95_sources})
 
-add_dependencies(lapack95 auxmod)
-target_link_libraries(lapack95 auxmod)
 target_include_directories(lapack95 PUBLIC ${LAPACK95_INCLUDE_DIR})
 
 install(TARGETS lapack95
