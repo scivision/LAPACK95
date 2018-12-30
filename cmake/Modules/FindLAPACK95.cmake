@@ -1,31 +1,43 @@
-# - Try to find Netlib LAPACK95 library
-# https://cmake.org/cmake/help/v3.11/manual/cmake-developer.7.html#find-modules
+# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+# file Copyright.txt or https://cmake.org/licensing for details.
 
-#.rst:
-# FindLAPACK95
-# -------
-# Michael Hirsch, Ph.D.
-#
-# Finds the LAPACK95 static library  (need the .a/.lib specified or CMake won't find it, unlike .so/.dll that can be omitted)
-# tested with Netlib LAPACK95
-#
-# Result Variables
-# ^^^^^^^^^^^^^^^^
-#
-#   LAPACK95_FOUND    - True if the system has the LAPACK95 library
-#   LAPACK95_VERSION  - The version of the LAPACK95 library which was found
+#[=======================================================================[.rst:
+FindLAPACK95
+------------
+
+Finds the LAPACK95 library (MKL or Netlib)
+
+Input Variables
+^^^^^^^^^^^^^^^
+
+``USEMKL``
+  specifies to search for MKL Lapack95 instead of Netlib.
+
+Result Variables
+^^^^^^^^^^^^^^^^
+
+``LAPACK95_FOUND``
+  System has the LAPACK95 library
+``LAPACK95_INCLUDE_DIRS``
+  LAPACK95 header files
+``LAPACK95_LIBRARIES``
+  LAPACK95 libraries  
+
+#]=======================================================================]
+
 
 if(USEMKL OR CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
 
   find_path(LAPACK95_INCLUDE_DIR 
             NAMES lapack95.mod
             PATHS $ENV{MKLROOT}/include 
-                  $ENV{MKLROOT}/include/intel64/lp64)
+                  $ENV{MKLROOT}/include/intel64/lp64
+                  NO_DEFAULT_PATH)
           
   foreach(slib mkl_blas95_lp64 mkl_lapack95_lp64 mkl_intel_lp64 mkl_sequential mkl_core)
     find_library(LAPACK95_${slib}_LIBRARY
              NAMES ${slib}
-             HINTS $ENV{MKLROOT}/lib
+             PATHS $ENV{MKLROOT}/lib
                    $ENV{MKLROOT}/lib/intel64
                    $ENV{INTEL}/mkl/lib/intel64
              NO_DEFAULT_PATH)
