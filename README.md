@@ -1,10 +1,11 @@
+[![DOI](https://zenodo.org/badge/162024736.svg)](https://zenodo.org/badge/latestdoi/162024736)
 [![Build Status](https://travis-ci.com/scivision/LAPACK95.svg?branch=master)](https://travis-ci.com/scivision/LAPACK95)
 
 # LAPACK95
 CMAKE-enhanced mirror of Netlib LAPACK95.
 
 
-## Build and install
+## Build
 
 the options `-Drealkind=` sets which precision to build (default `d`):
 
@@ -15,23 +16,49 @@ the options `-Drealkind=` sets which precision to build (default `d`):
 
 ```sh
 cd LAPACK95/build
-cmake -Drealkind=d ../SRC
-make -j
 ```
-yields:
+
+You may build with Meson or CMake.
+The build yields:
 
 * `LAPACK95/liblapack95.a`
 * Fortran module files in `LAPACK95/include/*.mod`.
 
-### Install
-The default install location is under `~/.local` on Unix-like systems, and can be specified with
-```sh
-cmake -DCMAKE_INSTALL_PREFIX=/your/install/path` ../SRC
-```
+### CMake
 
 ```sh
+cmake -Drealkind=d ../SRC
+make -j
+```
+
+### Meson
+
+```sh
+meson -Drealkind=d ../SRC
+ninja -j
+```
+
+
+## Install
+The default install location is under `~/.local/` on Unix-like systems.
+
+
+### CMake
+
+```sh
+cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local` ../SRC
+
 make install
 ```
+
+### Meson
+
+```sh
+meson configure --prefix=$HOME/.local
+
+ninja install
+```
+
 
 ## Use in a cmake project
 This library can be used inside a cmake project by adding this repository with `add_subdirectory`. 
