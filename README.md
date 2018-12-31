@@ -18,14 +18,13 @@ cd LAPACK95/build
 cmake -Drealkind=d ../SRC
 make -j
 ```
-gives  `liblapack95.a`, with module files placed in `include/`. Your program can then `use f95_lapack` and be compiled with e.g.
-```sh
-gfortran yourprogram.f90 -I/path/to/LAPACK95/build/include -L/path/to/LAPACK95/build -llapack95 -llapack
-```
-(assuming ordinary `LAPACK` is in your path).
+yields:
+
+* `LAPACK95/liblapack95.a`
+* Fortran module files in `LAPACK95/include/*.mod`.
 
 ### Install
-The default install location is under ~/.local on Unix-like systems, and can be specified with
+The default install location is under `~/.local` on Unix-like systems, and can be specified with
 ```sh
 cmake -DCMAKE_INSTALL_PREFIX=/your/install/path` ../SRC
 ```
@@ -34,14 +33,10 @@ cmake -DCMAKE_INSTALL_PREFIX=/your/install/path` ../SRC
 make install
 ```
 
-Programs can then be compiled with
-```sh
-gfortran yourprogram.f90 -I~/.local/include -llapack95 -llapack
-```
-(assuming `~/.local/lib` is in `LD_LIBRARY_PATH`).
-
 ## Use in a cmake project
-This library can be used inside a cmake project by adding this repository with `add_subdirectory`. One can for example use [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html):
+This library can be used inside a cmake project by adding this repository with `add_subdirectory`. 
+One can for example use 
+[FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) in your existing project:
 ```cmake
 cmake_minimum_required(VERSION 3.11)
 
@@ -64,23 +59,33 @@ target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
 
 ```
 
-## Example program
+## Examples
+
+More examples can be built by:
+```sh
+cd lapack95/tests/bin
+cmake ..
+
+make -j
+
+ctest -V
+```
 
 ```fortran
 program ex
-    ! Double precision
-    use la_precision, only: wp => dp
-    use f95_lapack, only: la_gesv
+! Double precision
+use la_precision, only: wp => dp
+use f95_lapack, only: la_gesv
 
-    real(wp) :: A(3,3), b(3)
+real(wp) :: A(3,3), b(3)
 
-    call random_number(A)
-    b(:) = 3*A(:,1) + 2*A(:,2) - A(:,3)
+call random_number(A)
+b(:) = 3*A(:,1) + 2*A(:,2) - A(:,3)
 
-    ! Solve Ax=b, overwrite b with solution
-    call la_gesv(A,b)
+! Solve Ax=b, overwrite b with solution
+call la_gesv(A,b)
 
-    write(*,*) b
+print *, b
 end program
 
 ! Output (exact: 3 2 -1):

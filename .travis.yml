@@ -1,3 +1,4 @@
+# gfortran >= 6 required for fortran2008
 language: c
 group: travis_latest
 dist: xenial
@@ -5,12 +6,14 @@ dist: xenial
 git:
   depth: 3
   quiet: true
+  
+env: FC=gfortran-6
 
 addons:
   apt:
-#    sources: ubuntu-toolchain-r-test
+    sources: ubuntu-toolchain-r-test
     packages: 
-    - gfortran
+    - gfortran-6
     - liblapack-dev
 
 matrix:
