@@ -21,25 +21,24 @@ Result Variables
 ``LAPACK95_INCLUDE_DIRS``
   LAPACK95 header files
 ``LAPACK95_LIBRARIES``
-  LAPACK95 libraries  
+  LAPACK95 libraries
 
 #]=======================================================================]
 
 
-if(USEMKL OR CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
 
-  find_path(LAPACK95_INCLUDE_DIR 
+  find_path(LAPACK95_INCLUDE_DIR
             NAMES lapack95.mod
-            PATHS $ENV{MKLROOT}/include 
-                  $ENV{MKLROOT}/include/intel64/lp64
-                  NO_DEFAULT_PATH)
-          
+            PATHS ENV MKLROOT
+            PATH_SUFFIXES include/intel64/lp64
+            NO_DEFAULT_PATH)
+
   foreach(slib mkl_blas95_lp64 mkl_lapack95_lp64 mkl_intel_lp64 mkl_sequential mkl_core)
     find_library(LAPACK95_${slib}_LIBRARY
              NAMES ${slib}
-             PATHS $ENV{MKLROOT}/lib
-                   $ENV{MKLROOT}/lib/intel64
-                   $ENV{INTEL}/mkl/lib/intel64
+             PATHS ENV MKLROOT
+             PATH_SUFFIXES lib/intel64
              NO_DEFAULT_PATH)
     if(NOT LAPACK95_${slib}_LIBRARY)
       message(FATAL_ERROR "NOT FOUND: " ${slib} ${LAPACK95_${slib}_LIBRARY})
@@ -50,18 +49,43 @@ if(USEMKL OR CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
   endforeach()
   list(APPEND LAPACK95_LIBRARY pthread dl m)
 
-else()
+elseif(USEMKL)  # MKL with non-Intel compiler
   set(BLA_F95 OFF)
-  find_package(LAPACK REQUIRED)
+  find_package(LAPACK)
+  if(NOT LAPACK_FOUND)
+    message(WARNING "Lapack is required for Lapack95")
+    return()
+  endif()
+  
+  find_path(LAPACK95_INCLUDE_DIR
+            NAMES lapack95.mod
+            PATHS include ${LAPACK95_ROOT}/include
+            PATH_SUFFIXES intel64/lp64
+            NO_DEFAULT_PATH)
 
   find_library(LAPACK95_LIBRARY
-               NAMES lapack95.a)
+               NAMES mkl_lapack95_lp64
+               PATHS lib ${LAPACK95_ROOT}/lib
+               PATH_SUFFIXES intel64
+               NO_DEFAULT_PATH)
 
+else() # Netlib
+  set(BLA_F95 OFF)
+  find_package(LAPACK)
+  if(NOT LAPACK_FOUND)
+    message(WARNING "Lapack is required for Lapack95")
+    return()
+  endif()
+  
   find_path(LAPACK95_INCLUDE_DIR
-            NAMES f95_lapack.mod)
+            NAMES f95_lapack.mod
+            PATHS ${LAPACK95_ROOT}/include)
+
+  find_library(LAPACK95_LIBRARY
+               NAMES lapack95
+               PATHS ${LAPACK95_ROOT}/lib)
 
 endif()
-
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LAPACK95

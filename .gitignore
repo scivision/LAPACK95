@@ -1,4 +1,5 @@
-lapack95_modules/
+build/
+include/
 bin/
 # Prerequisites
 *.d

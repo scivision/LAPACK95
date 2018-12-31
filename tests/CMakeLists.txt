@@ -21,9 +21,9 @@ find_package(LAPACK)
 if(NOT LAPACK95_FOUND)
   set(USEMKL false)
   # we didn't include BLAS95, so have to use our FindLapack95
-  list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../cmake/Modules/)
+  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/Modules/)
 
-  set(LAPACK95_ROOT ${CMAKE_SOURCE_DIR}/../LAPACK95)
+  set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../LAPACK95)
   find_package(LAPACK95 REQUIRED)
 endif()
 

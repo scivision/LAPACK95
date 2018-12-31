@@ -20,8 +20,11 @@ matrix:
 #    before_install: brew install gcc > /dev/null
 
 
-install: $TRAVIS_BUILD_DIR/build_L95.sh
-  
+install: 
+- cd $TRAVIS_BUILD_DIR/LAPACK95/build
+- cmake ../SRC
+- cmake --build . -j  
+
 script: 
 - cd $TRAVIS_BUILD_DIR/tests/bin
 - cmake ..
