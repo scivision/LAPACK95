@@ -33,10 +33,9 @@ else
   error('unknown realkind ',realkind)
 endif
 
-aux = library('aux', src_aux, 'la_auxmod.f90','la_erinfo.f90','la_ws_gels.f90', 'la_ws_gelss.f90')
+aux = files('la_auxmod.f90','la_erinfo.f90','la_ws_gels.f90', 'la_ws_gelss.f90')
 
-lapack95 = library('lapack95', src,
-  link_with: aux,
+lapack95 = library('lapack95', src, aux, src_aux,
   install : true)
 
 # --- tests
@@ -48,7 +47,7 @@ ex1 = '../EXAMPLES1'
 if lapack.found()
   gbsv = executable('gbsv', ex1 / 'la_gbsv_example.f90',
     dependencies : lapack,
-    include_directories : aux.private_dir_include(),
+    include_directories : lapack95.private_dir_include(),
     link_with : lapack95)
 
   test('GBSV', gbsv, args : ex1)
