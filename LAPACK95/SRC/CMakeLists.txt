@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.7)  # 3.7: install
 project(LAPACK95 Fortran)
+enable_testing()
 
 include(compilers.cmake)
 
@@ -17,6 +18,15 @@ set_target_properties(lapack95 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRE
 foreach(k ${realkind})
   target_sources(lapack95 PRIVATE ${${k}_sources})
 endforeach()
+
+
+# Test
+find_package(LAPACK)
+if(LAPACK_FOUND)
+  add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/../EXAMPLES1/la_gbsv_example.f90)
+  target_link_libraries(gbsv lapack95 ${LAPACK_LIBRARIES})
+  add_test(NAME GBSV COMMAND ./gbsv ../EXAMPLES1)
+endif()
 
 # Install
 if(UNIX AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
