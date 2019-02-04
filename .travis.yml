@@ -24,7 +24,7 @@ matrix:
 
 
 install: 
-- cd $TRAVIS_BUILD_DIR/LAPACK95/build
+- cd build
 - cmake ../SRC
 - cmake --build . -j  
 

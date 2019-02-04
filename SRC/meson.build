@@ -4,7 +4,7 @@ project('LAPACK95', 'fortran',
 
 fc = meson.get_compiler('fortran')
 if fc.get_id() == 'gcc'
-  add_global_arguments( '-fimplicit-none', language : 'fortran')
+  add_global_arguments( '-fimplicit-none','-Wno-tabs', language : 'fortran')
 endif
 
 s_src = files('la_sgesv.f90', 'la_sgesv1.f90', 'la_sgesvx.f90', 'la_sgesvx1.f90', 'la_sgetrf.f90', 'la_slagge.f90', 'la_slange.f90', 'la_slange1.f90', 'la_sgetri.f90', 'la_sgetrs.f90', 'la_sgetrs1.f90', 'la_sgeequ.f90', 'la_sgerfs.f90', 'la_sgerfs1.f90', 'la_ssytrd.f90', 'la_ssygst.f90', 'la_sorgtr.f90', 'la_spotrf.f90', 'la_sgbtrf.f90', 'la_slamch.f90', 'la_sgbsv.f90', 'la_sgbsv1.f90', 'la_sgbsvx.f90', 'la_sgbsvx1.f90', 'la_sgtsv.f90', 'la_sgtsv1.f90', 'la_sgtsvx.f90', 'la_sgtsvx1.f90', 'la_sposv.f90', 'la_sposv1.f90', 'la_sposvx.f90', 'la_sposvx1.f90', 'la_sppsv.f90', 'la_sppsv1.f90', 'la_sppsvx.f90', 'la_sppsvx1.f90', 'la_spbsv.f90', 'la_spbsv1.f90', 'la_spbsvx.f90', 'la_spbsvx1.f90', 'la_sptsv.f90', 'la_sptsv1.f90', 'la_sptsvx.f90', 'la_sptsvx1.f90', 'la_ssysv.f90', 'la_ssysv1.f90', 'la_ssysvx.f90', 'la_ssysvx1.f90', 'la_sspsv.f90', 'la_sspsv1.f90', 'la_sspsvx.f90', 'la_sspsvx1.f90', 'la_sgels.f90', 'la_sgels1.f90', 'la_sgelsx.f90', 'la_sgelsx1.f90', 'la_sgelss.f90', 'la_sgelss1.f90', 'la_sgglse.f90', 'la_sggglm.f90', 'la_ssyev.f90', 'la_ssyevd.f90', 'la_ssyevx.f90', 'la_sspev.f90', 'la_sspevd.f90', 'la_sspevx.f90', 'la_ssbev.f90', 'la_ssbevd.f90', 'la_ssbevx.f90', 'la_sstev.f90', 'la_sstevd.f90', 'la_sstevx.f90', 'la_sgees.f90', 'la_sgeesx.f90', 'la_sgeev.f90', 'la_sgeevx.f90', 'la_sgesvd.f90', 'la_ssygv.f90', 'la_sspgv.f90', 'la_ssbgv.f90', 'la_sgegs.f90', 'la_sgegv.f90', 'la_sggsvd.f90', 'la_sgelsy.f90', 'la_sgelsy1.f90', 'la_sspgvd.f90', 'la_ssbgvd.f90', 'la_ssygvd.f90', 'la_ssbgvx.f90', 'la_sspgvx.f90', 'la_sggev.f90', 'la_sgges.f90', 'la_sstevr.f90', 'la_sgelsd.f90', 'la_sgelsd1.f90', 'la_ssyevr.f90', 'la_sggevx.f90', 'la_ssygvx.f90', 'la_sggesx.f90', 'la_sgesdd.f90')
@@ -40,7 +40,7 @@ lapack95 = library('lapack95', src, aux, src_aux,
 
 # --- tests
 
-lapack = fc.find_library('lapack')
+lapack = fc.find_library('lapack', required : false)
 
 ex1 = '../EXAMPLES1'
 
@@ -53,4 +53,5 @@ if lapack.found()
   test('GBSV', gbsv, args : ex1)
 
 endif
+
 

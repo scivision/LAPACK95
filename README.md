@@ -15,7 +15,7 @@ the options `-Drealkind=` sets which precision to build (default `d`):
 * `z`: complex64
 
 ```sh
-cd LAPACK95/build
+cd build
 ```
 
 You may build with Meson or CMake.
@@ -90,7 +90,7 @@ target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
 
 More examples can be built by:
 ```sh
-cd lapack95/tests/bin
+cd tests/bin
 cmake ..
 
 make -j
