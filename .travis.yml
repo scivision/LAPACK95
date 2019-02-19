@@ -6,13 +6,13 @@ dist: xenial
 git:
   depth: 3
   quiet: true
-  
+
 env: FC=gfortran-6
 
 addons:
   apt:
     sources: ubuntu-toolchain-r-test
-    packages: 
+    packages:
     - gfortran-6
     - liblapack-dev
 
@@ -23,13 +23,13 @@ matrix:
 #    before_install: brew install gcc > /dev/null
 
 
-install: 
+install:
 - cd build
 - cmake ../SRC
-- cmake --build . -j  
+- cmake --build . -j
 
-script: 
-- cd $TRAVIS_BUILD_DIR/tests/bin
+script:
+- cd $TRAVIS_BUILD_DIR/tests/build
 - cmake ..
 - cmake --build .
 - ctest --output-on-failure
