@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/162024736.svg)](https://zenodo.org/badge/latestdoi/162024736)
 [![Build Status](https://travis-ci.com/scivision/LAPACK95.svg?branch=master)](https://travis-ci.com/scivision/LAPACK95)
+[![Build status](https://ci.appveyor.com/api/projects/status/qq3ua297298ajeat?svg=true)](https://ci.appveyor.com/project/scivision/lapack95)
 
 # LAPACK95
 CMake and Meson enhanced mirror of Netlib LAPACK95.

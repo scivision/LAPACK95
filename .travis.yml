@@ -24,7 +24,8 @@ matrix:
 
 
 install:
-- cmake -B build
+- cd build
+- cmake ..
 - cmake --build . -j
 
 script:
