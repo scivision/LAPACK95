@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 3.7)  # 3.7: install
+cmake_minimum_required(VERSION 3.13)  # 3.13 target_sources absolute # 3.7: install
 project(LAPACK95 C Fortran)
 enable_testing()
 
 include(cmake/compilers.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
-  cmake_policy(SET CMP0074 NEW)
-endif()
+cmake_policy(SET CMP0074 NEW)
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

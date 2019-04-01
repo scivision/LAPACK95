@@ -24,6 +24,8 @@ The build yields:
 
 ### CMake
 
+[CMake &ge; 3.13](https://github.com/scivision/cmake-utils/blob/master/cmake_setup.py) is required
+
 ```sh
 cmake -Drealkind=d -B build
 
