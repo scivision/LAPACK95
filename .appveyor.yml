@@ -15,5 +15,8 @@ install:
 
 - cmake --build .
 
-test_script: ctest --output-on-failure
+test_script:
+# now build the test
+- cmake --build .
+- ctest --output-on-failure
 

@@ -1,11 +1,13 @@
 # gfortran >= 6 required for fortran2008
-language: c
+language: python
 group: travis_latest
 dist: xenial
 
 git:
   depth: 25
   quiet: true
+
+python: 3.6
 
 env: FC=gfortran-6
 
@@ -22,6 +24,10 @@ matrix:
 #  - os: osx
 #    before_install: brew install gcc > /dev/null
 
+before_install:
+- pip install cmakeutils
+- cmake_setup 3.14.1
+- export PATH=$HOME/.local/cmake-3.14.1-Linux-x86_64/bin:$PATH
 
 install:
 - cd build
