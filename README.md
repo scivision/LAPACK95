@@ -2,7 +2,8 @@
 [![Build Status](https://travis-ci.com/scivision/LAPACK95.svg?branch=master)](https://travis-ci.com/scivision/LAPACK95)
 
 # LAPACK95
-CMAKE-enhanced mirror of Netlib LAPACK95.
+CMake and Meson enhanced mirror of Netlib LAPACK95.
+Easy to build and include in most projects and operating system.
 
 
 ## Build
@@ -14,11 +15,7 @@ the options `-Drealkind=` sets which precision to build (default `d`):
 * `c`: complex32
 * `z`: complex64
 
-```sh
-cd build
-```
-
-You may build with Meson or CMake.
+Build with Meson or CMake and a Fortran compiler.
 The build yields:
 
 * `LAPACK95/liblapack95.a`
@@ -27,15 +24,17 @@ The build yields:
 ### CMake
 
 ```sh
-cmake -Drealkind=d ../SRC
-make -j
+cmake -Drealkind=d -B build
+
+cmake --build build -j
 ```
 
 ### Meson
 
 ```sh
-meson -Drealkind=d ../SRC
-ninja -j
+meson -Drealkind=d build
+
+ninja -C build
 ```
 
 
@@ -46,7 +45,7 @@ The default install location is under `~/.local/` on Unix-like systems.
 ### CMake
 
 ```sh
-cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local` ../SRC
+cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local` -B build
 
 make install
 ```
@@ -54,15 +53,20 @@ make install
 ### Meson
 
 ```sh
-meson configure --prefix=$HOME/.local
+meson configure --prefix=$HOME/.local build
 
-ninja install
+meson install -C build
 ```
 
+This also installs the PkgConfig generated `~/.local/lib/pkgconfig/lapack95.pc`
+Check that this directory is in `echo $PKG_CONFIG_PATH` and if not, add to ~/.bashrc:
+```sh
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/.local/lib/pkgconfig
+```
 
 ## Use in a cmake project
-This library can be used inside a cmake project by adding this repository with `add_subdirectory`. 
-One can for example use 
+This library can be used inside a cmake project by adding this repository with `add_subdirectory`.
+One can for example use
 [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) in your existing project:
 ```cmake
 cmake_minimum_required(VERSION 3.11)
@@ -83,17 +87,17 @@ endif()
 
 add_executable(myexe ${CMAKE_CURRENT_SOURCE_DIR}/myexe.f90)
 target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
-
 ```
 
 ## Examples
 
 More examples can be built by:
 ```sh
-cd tests/bin
+cd tests/build
+
 cmake ..
 
-make -j
+cmake --build .
 
 ctest -V
 ```

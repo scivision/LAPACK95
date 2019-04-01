@@ -3,7 +3,7 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
 else()
   add_compile_options(-O3)
 endif()
-                         
+
 if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
 
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
@@ -15,4 +15,3 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Flang)
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL NAG)
   # https://www.nag.co.uk/nagware/np/r62_doc/manual/compiler_2_4.html#OPTIONS
 endif()
-

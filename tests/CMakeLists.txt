@@ -20,17 +20,17 @@ if(NOT CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
   set(LAPACK95_ROOT ${CMAKE_INSTALL_PREFIX} ${CMAKE_CURRENT_SOURCE_DIR}/..)
 endif()
 
-find_package(LAPACK95)
+find_package(LAPACK COMPONENTS LAPACK95)
 
-if(NOT LAPACK95_FOUND)
+if(NOT LAPACK_FOUND)
   # try a local non-installed build
-  set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../LAPACK95)
+  set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
   find_package(LAPACK95 REQUIRED)
 endif()
 
 add_executable(lp95 DemoLapack95.F90 assert.f90)
-target_link_libraries(lp95 PRIVATE ${LAPACK95_LIBRARIES})
-target_include_directories(lp95 PRIVATE ${LAPACK95_INCLUDE_DIRS})
+target_link_libraries(lp95 PRIVATE ${LAPACK_LIBRARIES})
+target_include_directories(lp95 PRIVATE ${LAPACK_INCLUDE_DIRS})
 target_compile_definitions(lp95 PRIVATE USEMKL=${USEMKL})
 add_test(NAME Lapack95 COMMAND lp95)
 

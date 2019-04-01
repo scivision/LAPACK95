@@ -3,8 +3,8 @@ if(USEMKL)
   return()
 endif()
 
-include_directories(${LAPACK95_INCLUDE_DIRS})
-link_libraries(${LAPACK95_LIBRARIES})
+include_directories(${LAPACK_INCLUDE_DIRS})
+link_libraries(${LAPACK_LIBRARIES})
 
 add_executable(gbsv la_gbsv_example.f90)
 add_test(NAME GBSV COMMAND gbsv ${CMAKE_CURRENT_SOURCE_DIR})
