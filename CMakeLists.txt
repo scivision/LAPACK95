@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.13)  # 3.13 target_sources absolute # 3.7: install
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug or Release")
+endif()
 project(LAPACK95 C Fortran)
 enable_testing()
 
@@ -16,22 +19,23 @@ add_library(lapack95)
 add_subdirectory(src)
 target_include_directories(lapack95 PUBLIC ${CMAKE_Fortran_MODULE_DIRECTORY})
 target_compile_options(lapack95 PRIVATE ${FFLAGS})
-set_target_properties(lapack95 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+set_target_properties(lapack95 PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 
 # Test
-set(LAPACK_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(LAPACK COMPONENTS LAPACK95)
 
 if(LAPACK_FOUND)
   add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1/la_gbsv_example.f90)
-  target_link_libraries(gbsv lapack95 ${LAPACK_LIBRARIES})
+  target_link_libraries(gbsv PRIVATE lapack95 ${LAPACK_LIBRARIES})
   add_test(NAME GBSV COMMAND ./gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1)
 endif()
 
 # Install
-if(UNIX AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "~/.local" CACHE PATH "..." FORCE)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "~/.local/lapack95" CACHE PATH "..." FORCE)
 endif()
 
 install(TARGETS lapack95

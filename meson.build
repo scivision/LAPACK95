@@ -1,5 +1,5 @@
 project('LAPACK95', 'fortran',
-  default_options : ['default_library=static', 'libdir=lib/'],
+  default_options : ['default_library=static', 'libdir=lapack95/lib/'],
   version : '1.0.0')
 
 fc = meson.get_compiler('fortran')

@@ -35,14 +35,14 @@ cmake --build build -j
 ### Meson
 
 ```sh
-meson -Drealkind=d build
+meson setup -Drealkind=d build
 
 ninja -C build
 ```
 
 
 ## Install
-The default install location is under `~/.local/` on Unix-like systems.
+The default install location is under `~/.local/lapack95`
 
 
 ### CMake

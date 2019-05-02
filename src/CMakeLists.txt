@@ -124,6 +124,5 @@ la_zheevr.f90 la_zggevx.f90 la_zhegvx.f90 la_zggesx.f90
 la_zgesdd.f90
 )
 
-foreach(k ${realkind})
-  target_sources(lapack95 PRIVATE ${${k}_sources})
-endforeach()
+# as per original README, only one kind can be compiled
+target_sources(lapack95 PRIVATE ${${realkind}_sources})
