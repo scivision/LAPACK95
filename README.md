@@ -9,14 +9,14 @@ Easy to build and include in most projects and operating system.
 
 ## Build
 
-the options `-Drealkind=` sets which precision to build (default `d`):
+the options `-Darith=` sets which precision to build (default `d`):
 
 * `s`: float32
 * `d`: float64
 * `c`: complex32
 * `z`: complex64
 
-Build with Meson or CMake and a Fortran compiler.
+Build with Meson (recommended) or CMake and a Fortran compiler.
 The build yields:
 
 * `LAPACK95/liblapack95.a`
@@ -27,36 +27,41 @@ The build yields:
 [CMake &ge; 3.13](https://github.com/scivision/cmake-utils/blob/master/cmake_setup.py) is required
 
 ```sh
-cmake -Drealkind=d -B build
+cmake -Darith=d -B build
 
-cmake --build build -j
+cmake --build build --parallel
+
+cd build
+
+ctest -V
 ```
 
 ### Meson
 
 ```sh
-meson setup -Drealkind=d build
+meson setup -Darith=d build
 
-ninja -C build
+meson test -C build
 ```
 
 
 ## Install
-The default install location is under `~/.local/lapack95`
+
+suppose you wish to install under `~/.local/lapack95`
 
 
 ### CMake
 
 ```sh
-cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local` -B build
+cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local -B build
 
-make install
+cmake --build build --parallel --target install
 ```
 
 ### Meson
 
 ```sh
-meson configure --prefix=$HOME/.local build
+meson setup build --prefix=$HOME/.local
 
 meson install -C build
 ```
@@ -94,19 +99,8 @@ target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
 
 ## Examples
 
-More examples can be built by:
-```sh
-cd tests/build
-
-cmake ..
-
-cmake --build .
-
-ctest -V
-```
 
 ```fortran
-program ex
 ! Double precision
 use la_precision, only: wp => dp
 use f95_lapack, only: la_gesv

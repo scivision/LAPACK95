@@ -13,14 +13,14 @@ z_aux = files('f77_lapack_double_dcomplex.f90', 'f95_lapack_double_dcomplex.f90'
 
 aux = files('la_auxmod.f90','la_erinfo.f90','la_ws_gels.f90', 'la_ws_gelss.f90')
 
-if realkind == 's'
+if arith == 's'
   src = [s_src, s_aux]
-elif realkind == 'd'
+elif arith == 'd'
   src = [d_src, d_aux]
-elif realkind == 'c'
+elif arith == 'c'
   src = [c_src, c_aux]
-elif realkind == 'z'
+elif arith == 'z'
   src = [z_src, z_aux]
 else
-  error('unknown realkind ',realkind)
+  error('unknown arith ', arith)
 endif

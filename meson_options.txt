@@ -1,2 +1,2 @@
-option('realkind', type : 'string', value : 'd',
+option('arith', type : 'string', value : 'd',
   description : 's: real32  d: real64  c: complex32  z: complex64')

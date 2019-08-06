@@ -11,8 +11,8 @@ cmake_policy(SET CMP0074 NEW)
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-if(NOT realkind)
-  set(realkind d)
+if(NOT arith)
+  set(arith d)
 endif()
 
 add_library(lapack95)

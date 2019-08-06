@@ -5,10 +5,16 @@ project('LAPACK95', 'fortran',
 
 fc = meson.get_compiler('fortran')
 if fc.get_id() == 'gcc'
-  add_global_arguments( '-fimplicit-none','-Wno-tabs', '-Wno-conversion', '-Wno-unused-label', language : 'fortran')
+  add_project_arguments( '-fimplicit-none','-Wno-tabs', '-Wno-conversion', '-Wno-unused-label', language : 'fortran')
+elif fcid == 'intel'
+  add_project_arguments('-warn declarations', '-heap-arrays', language : 'fortran')
+elif fcid == 'intel-cl'
+  add_project_arguments('/warn:declarations', '/heap-arrays', language : 'fortran')
+elif fcid == 'pgi'
+  add_project_arguments('-C', '-Mdclchk', language : 'fortran')
 endif
 
-realkind = get_option('realkind')
+arith = get_option('arith')
 subdir('src')
 
 lapack = dependency('lapack')

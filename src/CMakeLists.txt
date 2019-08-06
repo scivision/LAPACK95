@@ -125,4 +125,4 @@ la_zgesdd.f90
 )
 
 # as per original README, only one kind can be compiled
-target_sources(lapack95 PRIVATE ${${realkind}_sources})
+target_sources(lapack95 PRIVATE ${${arith}_sources})
