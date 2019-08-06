@@ -12,3 +12,15 @@ z_src = files('la_zgesv.f90', 'la_zgesv1.f90', 'la_zgesvx.f90', 'la_zgesvx1.f90'
 z_aux = files('f77_lapack_double_dcomplex.f90', 'f95_lapack_double_dcomplex.f90')
 
 aux = files('la_auxmod.f90','la_erinfo.f90','la_ws_gels.f90', 'la_ws_gelss.f90')
+
+if realkind == 's'
+  src = [s_src, s_aux]
+elif realkind == 'd'
+  src = [d_src, d_aux]
+elif realkind == 'c'
+  src = [c_src, c_aux]
+elif realkind == 'z'
+  src = [z_src, z_aux]
+else
+  error('unknown realkind ',realkind)
+endif

@@ -1,6 +1,7 @@
 project('LAPACK95', 'fortran',
   default_options : ['default_library=static', 'libdir=lapack95/lib/'],
-  version : '1.0.0')
+  version : '1.0.0',
+  meson_version: '>=0.50')
 
 fc = meson.get_compiler('fortran')
 if fc.get_id() == 'gcc'
@@ -9,20 +10,10 @@ endif
 
 realkind = get_option('realkind')
 subdir('src')
-if realkind == 's'
-  src = [s_src, s_aux]
-elif realkind == 'd'
-  src = [d_src, d_aux]
-elif realkind == 'c'
-  src = [c_src, c_aux]
-elif realkind == 'z'
-  src = [z_src, z_aux]
-else
-  error('unknown realkind ',realkind)
-endif
 
-lapack = dependency('lapack', language: 'fortran')
-lapack95 = library('lapack95', src, aux,
+lapack = dependency('lapack')
+lapack95 = library('lapack95',
+  sources: [src, aux],
   dependencies: lapack,
   install : true)
 
@@ -36,4 +27,5 @@ gbsv = executable('gbsv', 'EXAMPLES1' / 'la_gbsv_example.f90',
 include_directories : lapack95.private_dir_include(),
 link_with : lapack95)
 
-test('GBSV', gbsv, args : 'EXAMPLES1')
+test('GBSV', gbsv,
+  args : meson.source_root() /'EXAMPLES1')

@@ -7,8 +7,6 @@ git:
   depth: 25
   quiet: true
 
-python: 3.6
-
 env: FC=gfortran-6
 
 addons:
@@ -25,18 +23,10 @@ matrix:
 #    before_install: brew install gcc > /dev/null
 
 before_install:
-- pip install cmakeutils
-- cmake_setup 3.14.1
-- export PATH=$HOME/.local/cmake-3.14.1-Linux-x86_64/bin:$PATH
+- python -m pip install meson
+- curl -Ls https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip -o ninja-linux.zip
+- sudo unzip ninja-linux.zip -d /usr/local/bin/
 
-install:
-- cd build
-- cmake ..
-- cmake --build . -j
+install: meson build
 
-script:
-- cd $TRAVIS_BUILD_DIR/tests/build
-- cmake ..
-- cmake --build .
-- ctest --output-on-failure
-
+script: meson test -C build

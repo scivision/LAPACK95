@@ -9,14 +9,10 @@ init:
 - sh: sudo apt install -yq --no-install-recommends liblapacke-dev
 
 install:
-- cd build
-
-- sh: cmake ..
-
-- cmake --build .
+- sh: cmake -B build
+- cmake --build build --parallel
 
 test_script:
-# now build the test
-- cmake --build .
-- ctest --output-on-failure
+- cd build
+- ctest --parallel --output-on-failure
 
