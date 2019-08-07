@@ -1,6 +1,7 @@
 build/
 include/
-bin/
+subprojects/
+
 # Prerequisites
 *.d
 

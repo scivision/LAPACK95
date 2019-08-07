@@ -25,7 +25,7 @@ set_target_properties(lapack95 PROPERTIES
 
 # Test
 set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-find_package(LAPACK COMPONENTS LAPACK95)
+find_package(LAPACK)
 
 if(LAPACK_OK)
   add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1/la_gbsv_example.f90)

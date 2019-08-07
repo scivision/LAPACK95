@@ -1,5 +1,7 @@
 project('LAPACK95', 'fortran',
-  default_options : ['default_library=static', 'libdir=lapack95/lib/'],
+  default_options : ['default_library=static',
+    'libdir=lapack95/lib/', 'includedir=lapack95/include',
+    'buildtype=release'],
   version : '1.0.0',
   meson_version: '>=0.50')
 
@@ -17,7 +19,12 @@ endif
 arith = get_option('arith')
 subdir('src')
 
-lapack = dependency('lapack')
+lapack = dependency('lapack', required: false)
+if not lapack.found()
+  lapack_proj = subproject('lapack')
+  lapack = lapack_proj.get_variable('lapack')
+endif
+
 lapack95 = library('lapack95',
   sources: [src, aux],
   dependencies: lapack,
@@ -25,7 +32,10 @@ lapack95 = library('lapack95',
 
 # --- generate pkg-config
 pkg = import('pkgconfig')
-pkg.generate(lapack95, url: 'https://github.com/scivision/LAPACK95', subdirs: 'lapack95')
+pkg.generate(lapack95,
+  url: 'https://github.com/scivision/LAPACK95',
+  subdirs: 'lapack95',
+  description: 'Netlib LAPACK95')
 
 # --- tests
 
