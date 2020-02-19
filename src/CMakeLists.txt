@@ -1,5 +1,4 @@
 # Copied from LAPACK95/SRC/makefile
-cmake_policy(SET CMP0076 NEW)
 
 target_sources(lapack95 PRIVATE
     la_auxmod.f90 la_erinfo.f90 la_ws_gels.f90 la_ws_gelss.f90)

@@ -5,8 +5,6 @@ endif()
 project(lapack95demo C Fortran)
 enable_testing()
 
-cmake_policy(SET CMP0074 NEW)
-
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/Modules/)
 
 if(DEFINED ENV{MKLROOT} OR CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
