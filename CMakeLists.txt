@@ -33,19 +33,10 @@ if(LAPACK_OK)
 endif()
 
 # Install
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  if(WIN32)
-    set(HOME $ENV{USERPROFILE})
-  else()
-    set(HOME $ENV{HOME})
-  endif()
-
-  set(CMAKE_INSTALL_PREFIX "${HOME}/.local/lapack95" CACHE PATH "..." FORCE)
-endif()
 
 install(TARGETS lapack95
-        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
 
 install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ # don't omit trailing slash
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+        DESTINATION include)
