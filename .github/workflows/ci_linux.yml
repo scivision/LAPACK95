@@ -18,17 +18,29 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: prereqs
+      run: |
+        sudo apt update -yq
+        sudo apt install gfortran liblapack-dev
+
     - run: ctest -S setup.cmake -VV
       env:
         FC: gfortran-9
 
+
   meson:
+    if: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
+    - name: prereqs
+      run: |
+        sudo apt update -yq
+        sudo apt install gfortran liblapack-dev
 
     - run: pip install meson ninja
 

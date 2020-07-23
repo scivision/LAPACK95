@@ -8,10 +8,11 @@ enable_testing()
 include(cmake/compilers.cmake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 if(NOT arith)
-  set(arith "s;d")
+  # only one precision at a time
+  set(arith "d")
 endif()
 
 add_library(lapack95)
@@ -19,18 +20,15 @@ add_subdirectory(src)
 target_include_directories(lapack95 PUBLIC ${CMAKE_Fortran_MODULE_DIRECTORY})
 target_compile_options(lapack95 PRIVATE ${FFLAGS})
 set_target_properties(lapack95 PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-
+  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+add_library(LAPACK::LAPACK95 ALIAS lapack95)
 
 # Test
-set(LAPACK95_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-find_package(LAPACK)
+find_package(LAPACK REQUIRED)
 
-if(LAPACK_OK)
-  add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1/la_gbsv_example.f90)
-  target_link_libraries(gbsv PRIVATE lapack95 ${LAPACK_LIBRARIES})
-  add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1)
-endif()
+add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1/la_gbsv_example.f90)
+target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1)
 
 # Install
 
