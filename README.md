@@ -1,11 +1,10 @@
-[![DOI](https://zenodo.org/badge/162024736.svg)](https://zenodo.org/badge/latestdoi/162024736)
-[![Build Status](https://travis-ci.com/scivision/LAPACK95.svg?branch=master)](https://travis-ci.com/scivision/LAPACK95)
-[![Build status](https://ci.appveyor.com/api/projects/status/qq3ua297298ajeat?svg=true)](https://ci.appveyor.com/project/scivision/lapack95)
-
 # LAPACK95
+
+[![DOI](https://zenodo.org/badge/162024736.svg)](https://zenodo.org/badge/latestdoi/162024736)
+![ci_linux](https://github.com/scivision/lapack95/workflows/ci_linux/badge.svg)
+
 CMake and Meson enhanced mirror of Netlib LAPACK95.
 Easy to build and include in most projects and operating system.
-
 
 ## Build
 
@@ -24,16 +23,8 @@ The build yields:
 
 ### CMake
 
-[CMake &ge; 3.13](https://github.com/scivision/cmake-utils/blob/master/cmake_setup.py) is required
-
 ```sh
-cmake -Darith=d -B build
-
-cmake --build build --parallel
-
-cd build
-
-ctest -V
+ctest -S setup.cmake -VV
 ```
 
 ### Meson
@@ -44,18 +35,18 @@ meson setup -Darith=d build
 meson test -C build
 ```
 
-
 ## Install
 
 suppose you wish to install under `~/.local/lapack95`
-
 
 ### CMake
 
 ```sh
 cmake -DCMAKE_INSTALL_PREFIX=$HOME/.local -B build
 
-cmake --build build --parallel --target install
+cmake --build build --parallel
+
+cmake --install build
 ```
 
 ### Meson
@@ -68,11 +59,13 @@ meson install -C build
 
 This also installs the PkgConfig generated `~/.local/lib/pkgconfig/lapack95.pc`
 Check that this directory is in `echo $PKG_CONFIG_PATH` and if not, add to ~/.bashrc:
+
 ```sh
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/.local/lib/pkgconfig
 ```
 
 ## Use in a cmake project
+
 This library can be used inside a cmake project by adding this repository with `add_subdirectory`.
 One can for example use
 [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) in your existing project:
@@ -98,7 +91,6 @@ target_link_libraries(myexe ${LAPACK_LIBRARIES} lapack95)
 ```
 
 ## Examples
-
 
 ```fortran
 ! Double precision

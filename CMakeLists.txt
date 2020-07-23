@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)  # 3.13 target_sources absolute # 3.7: install
+cmake_minimum_required(VERSION 3.13)  # 3.13 target_sources absolute
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug or Release")
 endif()
@@ -11,7 +11,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 if(NOT arith)
-  set(arith d)
+  set(arith "s;d")
 endif()
 
 add_library(lapack95)
