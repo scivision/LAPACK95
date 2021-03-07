@@ -2,7 +2,7 @@ project('LAPACK95', 'fortran',
   default_options : ['default_library=static',
     'libdir=lapack95/lib/', 'includedir=lapack95/include',
     'buildtype=release'],
-  version : '1.0.0',
+  version : '3.0',
   meson_version: '>=0.50')
 
 fc = meson.get_compiler('fortran')
@@ -12,8 +12,6 @@ elif fcid == 'intel'
   add_project_arguments('-warn declarations', '-heap-arrays', language : 'fortran')
 elif fcid == 'intel-cl'
   add_project_arguments('/warn:declarations', '/heap-arrays', language : 'fortran')
-elif fcid == 'pgi'
-  add_project_arguments('-C', '-Mdclchk', language : 'fortran')
 endif
 
 arith = get_option('arith')

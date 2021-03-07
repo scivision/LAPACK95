@@ -15,7 +15,7 @@ the options `-Darith=` sets which precision to build (default `d`):
 * `c`: complex32
 * `z`: complex64
 
-Build with Meson (recommended) or CMake and a Fortran compiler.
+Build with CMake and a Fortran compiler.
 The build yields:
 
 * `LAPACK95/liblapack95.a`
@@ -24,15 +24,16 @@ The build yields:
 ### CMake
 
 ```sh
-ctest -S setup.cmake -VV
+cmake -B build
+cmake --build build
 ```
 
 ### Meson
 
 ```sh
-meson setup -Darith=d build
+meson setup build
 
-meson test -C build
+meson compile -C build
 ```
 
 ## Install

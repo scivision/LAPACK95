@@ -4,5 +4,3 @@ Contributors to the enhanced mirror at https://github.com/scivision/lapack95 inc
 
 @anjohan       Anders Johansson
 @scivision     Michael Hirsch, Ph.D.
-
-

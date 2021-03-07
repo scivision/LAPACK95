@@ -1,15 +1,19 @@
-if(USEMKL)
-  message(WARNING "Netlib Examples are only for Netlib LAPACK95 unless you add preprocessing USE statements (simple to do)")
-  return()
-endif()
+cmake_minimum_required(VERSION 3.13...3.20)
 
-include_directories(${LAPACK_INCLUDE_DIRS})
-link_libraries(${LAPACK_LIBRARIES})
+project(DemoLapack95 LANGUAGES Fortran)
+
+include(CTest)
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules)
+
+find_package(LAPACK COMPONENTS LAPACK95 REQUIRED)
 
 add_executable(gbsv la_gbsv_example.f90)
-add_test(NAME GBSV COMMAND gbsv ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(gesvx la_gesvx_example.f90)
+target_link_libraries(gesvx PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
 add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
 
 
@@ -27,10 +31,10 @@ add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
 #la_gelsy_example.f90    la_gtsvx_example.f90  la_ptsvx_example.f90  la_sygvx_example.f90
 
 add_executable(geqrf la_geqrf_example.f90)
+target_link_libraries(geqrf PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
 add_test(NAME GEQRF COMMAND geqrf)
 
 #la_hesv_example.f90   la_sbev_example.f90   la_sysv_example.f90
 #la_gesvd_example.f90    la_hpev_example.f90   la_sbevx_example.f90  la_sysvx_example.f90
 #la_gesv_example.f90     la_hpevx_example.f90  la_sbgv_example.f90
 #la_gesvxab_example.f90  la_hpgv_example.f90   la_sbgvx_example.f90
-

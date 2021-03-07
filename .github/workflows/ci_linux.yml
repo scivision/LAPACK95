@@ -21,11 +21,18 @@ jobs:
     - name: prereqs
       run: |
         sudo apt update -yq
-        sudo apt install gfortran liblapack-dev
+        sudo apt install ninja-build gfortran liblapack-dev
 
-    - run: ctest -S setup.cmake -VV
-      env:
-        FC: gfortran-9
+    - run: cmake --preset=ninja -DCMAKE_INSTALL_PREFIX=~/lapack95
+    - run: cmake --build build
+    - run: cmake --install build
+    - run: ctest -V
+      working-directory: build
+
+    - run: cmake -S EXAMPLES1 -B EXAMPLES1/build -DLAPACK95_ROOT=~/lapack95
+    - run: cmake --build EXAMPLES1/build
+    - run: ctest -V
+      working-directory: EXAMPLES1/build
 
 
   meson:
@@ -45,19 +52,6 @@ jobs:
     - run: pip install meson ninja
 
     - run: meson setup build -Darith=s
-      env:
-        FC: gfortran-9
 
     - run: meson compile -C build
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: Linux_Meson_Buildlog
-        path: build/meson-logs/meson-log.txt
-
     - run: meson test -C build -v
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: Linux_Meson_Testlog
-        path: build/meson-logs/testlog.txt

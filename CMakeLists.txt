@@ -1,40 +1,50 @@
-cmake_minimum_required(VERSION 3.13)  # 3.13 target_sources absolute
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug or Release")
-endif()
-project(LAPACK95 C Fortran)
-enable_testing()
+cmake_minimum_required(VERSION 3.13...3.20)  # 3.13 target_sources absolute
 
-include(cmake/compilers.cmake)
+project(LAPACK
+LANGUAGES C Fortran
+VERSION 3.0)
+
+include(CTest)
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
+include(cmake/compilers.cmake)
 
 if(NOT arith)
   # only one precision at a time
   set(arith "d")
 endif()
 
-add_library(lapack95)
-add_subdirectory(src)
-target_include_directories(lapack95 PUBLIC ${CMAKE_Fortran_MODULE_DIRECTORY})
-target_compile_options(lapack95 PRIVATE ${FFLAGS})
-set_target_properties(lapack95 PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-add_library(LAPACK::LAPACK95 ALIAS lapack95)
-
-# Test
 find_package(LAPACK REQUIRED)
 
-add_executable(gbsv ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1/la_gbsv_example.f90)
-target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
-add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR}/EXAMPLES1)
+add_library(lapack95)
+target_link_libraries(lapack95 PRIVATE LAPACK::LAPACK)
+set_target_properties(lapack95 PROPERTIES
+  Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include
+  EXPORT_NAME LAPACK95)
+target_include_directories(lapack95
+PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include  # for IBM XL
+INTERFACE
+$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+$<INSTALL_INTERFACE:include>)
 
-# Install
+add_subdirectory(src)
 
 install(TARGETS lapack95
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+  EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
 
-install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ # don't omit trailing slash
-        DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/ # don't omit trailing slash
+  DESTINATION include)
+
+# for FetchContent use
+add_library(LAPACK::LAPACK95 INTERFACE IMPORTED GLOBAL)
+target_link_libraries(LAPACK::LAPACK95 INTERFACE lapack95)
+
+# Test
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+
+include(cmake/install.cmake)
