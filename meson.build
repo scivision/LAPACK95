@@ -17,11 +17,7 @@ endif
 arith = get_option('arith')
 subdir('src')
 
-lapack = dependency('lapack', required: false)
-if not lapack.found()
-  lapack_proj = subproject('lapack')
-  lapack = lapack_proj.get_variable('lapack')
-endif
+lapack = dependency('lapack', required: true)
 
 lapack95 = library('lapack95',
   sources: [src, aux],

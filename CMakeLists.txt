@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13...3.20)  # 3.13 target_sources absolute
+cmake_minimum_required(VERSION 3.19...3.21)
 
 project(LAPACK
 LANGUAGES C Fortran
@@ -13,6 +13,11 @@ include(cmake/compilers.cmake)
 if(NOT arith)
   # only one precision at a time
   set(arith "d")
+endif()
+
+list(LENGTH arith L)
+if(NOT L EQUAL 1)
+  message(FATAL_ERROR "Lapack95 modules require exactly one arithmetic precision")
 endif()
 
 find_package(LAPACK REQUIRED)
@@ -30,10 +35,7 @@ $<INSTALL_INTERFACE:include>)
 
 add_subdirectory(src)
 
-install(TARGETS lapack95
-  EXPORT ${PROJECT_NAME}Targets
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+install(TARGETS lapack95 EXPORT ${PROJECT_NAME}Targets)
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/ # don't omit trailing slash
   DESTINATION include)

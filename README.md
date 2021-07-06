@@ -16,10 +16,10 @@ the options `-Darith=` sets which precision to build (default `d`):
 * `z`: complex64
 
 Build with CMake and a Fortran compiler.
-The build yields:
+The build yields under the build/ director:
 
-* `LAPACK95/liblapack95.a`
-* Fortran module files in `LAPACK95/include/*.mod`.
+* `liblapack95.a`
+* Fortran module files in `include/*.mod`.
 
 ### CMake
 
@@ -58,7 +58,7 @@ meson setup build --prefix=$HOME/.local
 meson install -C build
 ```
 
-This also installs the PkgConfig generated `~/.local/lib/pkgconfig/lapack95.pc`
+This also installs the PkgConfig generated `lib/pkgconfig/lapack95.pc`
 Check that this directory is in `echo $PKG_CONFIG_PATH` and if not, add to ~/.bashrc:
 
 ```sh

@@ -23,19 +23,10 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake
   DESTINATION lib/cmake/${PROJECT_NAME})
 
-export(EXPORT ${PROJECT_NAME}Targets
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}Targets.cmake"
-  NAMESPACE ${PROJECT_NAME}::
-)
-
 # --- CPack
 
-set(_fmt TGZ)
-if(WIN32)
-  set(_fmt ZIP)
-endif()
-set(CPACK_GENERATOR ${_fmt})
-set(CPACK_SOURCE_GENERATOR ${_fmt})
+set(CPACK_GENERATOR TGZ)
+set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_PACKAGE_VENDOR "Netlib")
 set(CPACK_PACKAGE_CONTACT "Netlib")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "liblapack-dev")
