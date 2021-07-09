@@ -143,26 +143,21 @@ if(LAPACK95 IN_LIST LAPACK_FIND_COMPONENTS)
                  NAMES lapack95
                  PATHS ${LAPACK95_ROOT})
 
-  if(LAPACK95_LIBRARY AND LAPACK95_INCLUDE_DIR)
-    set(LAPACK_INCLUDE_DIR ${LAPACK95_INCLUDE_DIR})
-    set(LAPACK_LIBRARY ${LAPACK95_LIBRARY})
-  else()
+  if(NOT (LAPACK95_LIBRARY AND LAPACK95_INCLUDE_DIR))
     return()
   endif()
+
+  set(LAPACK_INCLUDE_DIR ${LAPACK95_INCLUDE_DIR})
+  set(LAPACK_LIBRARY ${LAPACK95_LIBRARY})
+  set(LAPACK_LAPACK95_FOUND true PARENT_SCOPE)
 endif(LAPACK95 IN_LIST LAPACK_FIND_COMPONENTS)
 
-set(_lapack_hints)
-if(CMAKE_Fortran_COMPILER_ID STREQUAL PGI)
-  get_filename_component(_pgi_path ${CMAKE_Fortran_COMPILER} DIRECTORY)
-  set(_lapack_hints ${_pgi_path}/../)
-endif()
 
 pkg_search_module(pc_lapack lapack-netlib lapack)
 
 find_library(LAPACK_LIB
   NAMES lapack
-  PATHS /usr/local/opt  # homebrew
-  HINTS ${_lapack_hints} ${pc_lapack_LIBRARY_DIRS} ${pc_lapack_LIBDIR}
+  HINTS ${pc_lapack_LIBRARY_DIRS} ${pc_lapack_LIBDIR}
   PATH_SUFFIXES lapack lapack/lib)
 if(LAPACK_LIB)
   list(APPEND LAPACK_LIBRARY ${LAPACK_LIB})
@@ -174,14 +169,12 @@ if(LAPACKE IN_LIST LAPACK_FIND_COMPONENTS)
   pkg_check_modules(pc_lapacke lapacke)
   find_library(LAPACKE_LIBRARY
     NAMES lapacke
-    PATHS /usr/local/opt
     HINTS ${pc_lapacke_LIBRARY_DIRS} ${pc_lapacke_LIBDIR}
     PATH_SUFFIXES lapack lapack/lib)
 
   # lapack/include for Homebrew
   find_path(LAPACKE_INCLUDE_DIR
     NAMES lapacke.h
-    PATHS /usr/local/opt
     HINTS ${pc_lapacke_INCLUDE_DIRS} ${pc_lapacke_LIBDIR}
     PATH_SUFFIXES lapack lapack/include)
 
@@ -202,8 +195,7 @@ pkg_search_module(pc_blas blas-netlib blas)
 find_library(BLAS_LIBRARY
   NAMES refblas blas
   NAMES_PER_DIR
-  PATHS /usr/local/opt
-  HINTS ${_lapack_hints} ${pc_blas_LIBRARY_DIRS} ${pc_blas_LIBDIR}
+  HINTS ${pc_blas_LIBRARY_DIRS} ${pc_blas_LIBDIR}
   PATH_SUFFIXES lapack lapack/lib blas)
 
 if(BLAS_LIBRARY)
@@ -215,10 +207,6 @@ endif()
 
 if(NOT WIN32)
   list(APPEND LAPACK_LIBRARY ${CMAKE_THREAD_LIBS_INIT})
-endif()
-
-if(LAPACK95_LIBRARY)
-  set(LAPACK_LAPACK95_FOUND true PARENT_SCOPE)
 endif()
 
 set(LAPACK_LIBRARY ${LAPACK_LIBRARY} PARENT_SCOPE)
