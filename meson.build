@@ -1,7 +1,5 @@
 project('LAPACK95', 'fortran',
-  default_options : ['default_library=static',
-    'libdir=lapack95/lib/', 'includedir=lapack95/include',
-    'buildtype=release'],
+  default_options : ['default_library=static', 'buildtype=release'],
   version : '3.0',
   meson_version: '>=0.50')
 

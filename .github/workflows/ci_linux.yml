@@ -23,17 +23,16 @@ jobs:
         sudo apt update -yq
         sudo apt install ninja-build gfortran liblapack-dev
 
-    - run: cmake --preset default -DCMAKE_INSTALL_PREFIX=~
+    - run: cmake --preset default
     - run: cmake --build build
     - run: cmake --install build
     - run: ctest --preset default
 
-    - run: cmake -S EXAMPLES1 -B EXAMPLES1/build -DLAPACK95_ROOT=~
+    - run: cmake -S EXAMPLES1 -B EXAMPLES1/build -DLAPACK95_ROOT=build
     - run: cmake --build EXAMPLES1/build
     - run: ctest -V --test-dir EXAMPLES1/build
 
   meson:
-    if: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
