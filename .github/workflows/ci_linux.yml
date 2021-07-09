@@ -7,7 +7,6 @@ on:
       - "**.F90"
       - "**.cmake"
       - "**/CMakeLists.txt"
-      - "**/meson.build"
       - ".github/workflows/ci_linux.yml"
 
 
@@ -31,23 +30,3 @@ jobs:
     - run: cmake -S EXAMPLES1 -B EXAMPLES1/build -DLAPACK95_ROOT=../build
     - run: cmake --build EXAMPLES1/build
     - run: ctest -V --test-dir EXAMPLES1/build
-
-  meson:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: prereqs
-      run: |
-        sudo apt update -yq
-        sudo apt install gfortran liblapack-dev
-
-    - run: pip install meson ninja
-
-    - run: meson setup build -Darith=s
-
-    - run: meson compile -C build
-    - run: meson test -C build -v
