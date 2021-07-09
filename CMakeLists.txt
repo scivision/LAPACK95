@@ -20,6 +20,8 @@ if(NOT L EQUAL 1)
   message(FATAL_ERROR "Lapack95 modules require exactly one arithmetic precision")
 endif()
 
+message(STATUS "LAPACK95: building precision: ${arith}")
+
 find_package(LAPACK REQUIRED)
 
 add_library(lapack95)
