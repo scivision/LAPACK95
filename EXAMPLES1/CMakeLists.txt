@@ -8,14 +8,19 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules)
 
 find_package(LAPACK COMPONENTS LAPACK95 REQUIRED)
 
-add_executable(gbsv la_gbsv_example.f90)
-target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
-add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR})
+if(LAPACK_d_FOUND)
+  add_executable(gbsv la_gbsv_example.f90)
+  target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+  add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(gesvx la_gesvx_example.f90)
-target_link_libraries(gesvx PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
-add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(gesvx la_gesvx_example.f90)
+  target_link_libraries(gesvx PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+  add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
 
+  add_executable(geqrf la_geqrf_example.f90)
+  target_link_libraries(geqrf PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+  add_test(NAME GEQRF COMMAND geqrf)
+endif()
 
 #add_executable(hpgvx la_hpgvx_example.f90)
 #add_test(NAME HPGVX COMMAND hpgvx)
@@ -30,9 +35,7 @@ add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
 #la_gelss_example.f90    la_gtsv_example.f90   la_ptsv_example.f90   la_sygv_example.f90
 #la_gelsy_example.f90    la_gtsvx_example.f90  la_ptsvx_example.f90  la_sygvx_example.f90
 
-add_executable(geqrf la_geqrf_example.f90)
-target_link_libraries(geqrf PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
-add_test(NAME GEQRF COMMAND geqrf)
+
 
 #la_hesv_example.f90   la_sbev_example.f90   la_sysv_example.f90
 #la_gesvd_example.f90    la_hpev_example.f90   la_sbevx_example.f90  la_sysvx_example.f90
