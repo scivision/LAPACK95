@@ -137,11 +137,12 @@ function(netlib_libs)
 if(LAPACK95 IN_LIST LAPACK_FIND_COMPONENTS)
   find_path(LAPACK95_INCLUDE_DIR
               NAMES f95_lapack.mod
-              PATHS ${LAPACK95_ROOT})
+              HINTS ${LAPACK95_ROOT}
+              PATH_SUFFIXES include)
 
   find_library(LAPACK95_LIBRARY
                  NAMES lapack95
-                 PATHS ${LAPACK95_ROOT})
+                 HINTS ${LAPACK95_ROOT})
 
   if(NOT (LAPACK95_LIBRARY AND LAPACK95_INCLUDE_DIR))
     return()
