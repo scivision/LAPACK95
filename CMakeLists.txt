@@ -39,8 +39,12 @@ add_subdirectory(src)
 
 install(TARGETS lapack95 EXPORT ${PROJECT_NAME}Targets)
 
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/ # don't omit trailing slash
-  DESTINATION include)
+install(FILES
+${CMAKE_CURRENT_BINARY_DIR}/include/f77_lapack.mod
+${CMAKE_CURRENT_BINARY_DIR}/include/f95_lapack.mod
+${CMAKE_CURRENT_BINARY_DIR}/include/la_auxmod.mod
+${CMAKE_CURRENT_BINARY_DIR}/include/la_precision.mod
+TYPE INCLUDE)
 
 # for FetchContent use
 add_library(LAPACK::LAPACK95 INTERFACE IMPORTED GLOBAL)

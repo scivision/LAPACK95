@@ -4,12 +4,7 @@ use, intrinsic:: ieee_arithmetic, only: ieee_is_finite
 use, intrinsic:: iso_fortran_env, only: wp=>real64, stderr=>error_unit
 use assert, only: assert_isclose
 
-#if USEMKL
-use lapack95, only: gesvd
-#else
 use f95_lapack, only: gesvd=>la_gesvd
-#endif
-!use lapack, only: dlamch, sdisna
 
 implicit none
 

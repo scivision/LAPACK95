@@ -5,8 +5,13 @@ PROGRAM EXAMPLE
 !     DECEMBER, 1999
 
 !  .. "Use Statements"
-USE LA_PRECISION, ONLY: WP => dp
+use, intrinsic :: iso_fortran_env, only : wp => real64
+
+#if USEMKL
+use lapack95, only: gbsv
+#else
 use f95_lapack, only: gbsv=>la_gbsv
+#endif
 !  .. "Implicit Statement" ..
 IMPLICIT NONE
 !  .. "Local Scalars" ..
@@ -17,29 +22,29 @@ REAL(WP), ALLOCATABLE :: AB(:,:), B(:,:)
 character(1024) :: argv
 !  .. "Executable Statements" ..
 print *, 'SGBSV Example Program Results.'
-N = 6; KL = 2; KU = 1; NRHS = 2  
+N = 6; KL = 2; KU = 1; NRHS = 2
 ALLOCATE ( AB(2*KL+KU+1,N), B(N,NRHS), IPIV(N))
 
 call get_command_argument(1, argv)
 
 OPEN(newunit=u,FILE=trim(argv)//'/gbsv.ma',STATUS='old')
-DO I=KL+1,2*KL+KU+1 
+DO I=KL+1,2*KL+KU+1
 DO J=1,N
   READ(u,'(F2.0)') AB(I,J)
-ENDDO  
+ENDDO
 ENDDO
 CLOSE(u)
 
 print *, 'The matrix AB:'
-DO I=1,N; WRITE(*,"(5(I3,1X,1X),I3,1X)") INT(AB(I,:)); 
+DO I=1,N; WRITE(*,"(5(I3,1X,1X),I3,1X)") INT(AB(I,:));
 ENDDO
 
-DO I = 1, NRHS  
+DO I = 1, NRHS
 DO J = 1, N
-DO K = MAX(1,J-KL),MIN(J+KU,N); B(J,I) = AB(KL+KU+1+J-K,K)+B(J,I); 
+DO K = MAX(1,J-KL),MIN(J+KU,N); B(J,I) = AB(KL+KU+1+J-K,K)+B(J,I);
 ENDDO
 ENDDO
-B(:,I) = B(:,I)*I; 
+B(:,I) = B(:,I)*I;
 ENDDO
 
 print *, 'The RHS matrix B:'

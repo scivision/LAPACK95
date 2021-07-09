@@ -8,18 +8,28 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules)
 
 find_package(LAPACK COMPONENTS LAPACK95 REQUIRED)
 
+if(DEFINED ENV{MKLROOT} OR CMAKE_Fortran_COMPILER_ID MATCHES Intel)
+  set(USEMKL 1)
+else()
+  set(USEMKL 0)
+endif()
+
 if(LAPACK_d_FOUND)
-  add_executable(gbsv la_gbsv_example.f90)
+  add_executable(gbsv la_gbsv_example.F90)
   target_link_libraries(gbsv PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+  target_compile_definitions(gbsv PRIVATE USEMKL=${USEMKL})
   add_test(NAME GBSV COMMAND $<TARGET_FILE:gbsv> ${CMAKE_CURRENT_SOURCE_DIR})
 
-  add_executable(gesvx la_gesvx_example.f90)
+  add_executable(gesvx la_gesvx_example.F90)
   target_link_libraries(gesvx PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+  target_compile_definitions(gesvx PRIVATE USEMKL=${USEMKL})
   add_test(NAME GESVX COMMAND gesvx ${CMAKE_CURRENT_SOURCE_DIR})
 
-  add_executable(geqrf la_geqrf_example.f90)
-  target_link_libraries(geqrf PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
-  add_test(NAME GEQRF COMMAND geqrf)
+  if(NOT USEMKL)
+    add_executable(geqrf la_geqrf_example.f90)
+    target_link_libraries(geqrf PRIVATE LAPACK::LAPACK95 LAPACK::LAPACK)
+    add_test(NAME GEQRF COMMAND geqrf)
+  endif()
 endif()
 
 #add_executable(hpgvx la_hpgvx_example.f90)

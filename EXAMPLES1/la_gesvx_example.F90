@@ -5,8 +5,13 @@ PROGRAM EXAMPLE
 !     DECEMBER, 1999
 !
 !  .. "Use Statements" ..
-USE LA_PRECISION, ONLY: WP => dp
-USE F95_LAPACK, ONLY: LA_GESVX
+use, intrinsic :: iso_fortran_env, only : wp => real64
+
+#if USEMKL
+use lapack95, only: gesvx
+#else
+use f95_lapack, only: gesvx => la_gesvx
+#endif
 !  .. "Implicit Statement" ..
 IMPLICIT NONE
 !  .. "Local Scalars" ..
@@ -30,9 +35,9 @@ call get_command_argument(1,argv)
 
 OPEN(newunit=u,FILE=trim(argv)//'/gesv.ma',STATUS='old')
 DO J=1,N
-DO I=1,N 
+DO I=1,N
    READ(u,'(F2.0)') AA(I,J)
-ENDDO  
+ENDDO
 ENDDO
 CLOSE(u)
 
@@ -46,9 +51,9 @@ DO I=1,N; WRITE(*,"(4(I3,1X),I3,1X)") INT(AA(I,:)); ENDDO
 
 print *, 'The RHS matrix B:'
 DO I=1,N; WRITE(*,"(2(I3,1X),I3,1X)") INT(BB(I,:)); ENDDO
-  
+
 A=AA; B=BB
-CALL LA_GESVX( A, B, X, FERR=FERR, BERR=BERR, RCOND=RCOND, RPVGRW=RPVGRW, info=info )
+CALL GESVX( A, B, X, FERR=FERR, BERR=BERR, RCOND=RCOND, RPVGRW=RPVGRW, info=info )
 
 print *, 'FERR = ', FERR
 print *, 'BERR = ', BERR

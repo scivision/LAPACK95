@@ -31,7 +31,7 @@ pkg.generate(lapack95,
 
 # --- tests
 
-gbsv = executable('gbsv', 'EXAMPLES1' / 'la_gbsv_example.f90',
+gbsv = executable('gbsv', 'EXAMPLES1' / 'la_gbsv_example.F90',
 include_directories : lapack95.private_dir_include(),
 link_with : lapack95)
 
