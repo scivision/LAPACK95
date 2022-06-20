@@ -1,0 +1,51 @@
+{
+  "version": 3,
+
+"configurePresets": [
+{
+  "name": "multi",
+  "binaryDir": "${sourceDir}/build",
+  "displayName": "Ninja Multi-Config",
+  "generator": "Ninja Multi-Config"
+},
+{
+  "name": "phony"
+}
+],
+"buildPresets": [
+  {
+    "name": "release",
+    "configurePreset": "multi",
+    "configuration": "Release"
+  },
+  {
+    "name": "debug",
+    "configurePreset": "multi",
+    "configuration": "Debug"
+  }
+],
+"testPresets": [
+{
+  "name": "default",
+  "configurePreset": "phony",
+  "output": {
+    "outputOnFailure": true,
+    "verbosity": "default"
+  },
+  "execution": {
+    "noTestsAction": "error",
+    "stopOnFailure": false
+  }
+},
+{
+  "name": "release", "inherits": "default",
+  "configurePreset": "multi",
+  "configuration": "Release"
+},
+{
+  "name": "debug", "inherits": "default",
+  "configurePreset": "multi",
+  "configuration": "Debug"
+}
+]
+}
