@@ -1,10 +1,10 @@
-option(${PROJECT_NAME}_BUILD_TESTING "build tests" true)
-
 message(STATUS "Lapack95 ${PROJECT_VERSION}  CMake ${CMAKE_VERSION}")
+
+option(${PROJECT_NAME}_BUILD_TESTING "build tests" true)
 
 set(CMAKE_TLS_VERIFY ON)
 
-set(FETCHCONTENT_UPDATES_DISCONNECTED_LAPACK95 true)
+set(FETCHCONTENT_UPDATES_DISCONNECTED true)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/Modules)
 
@@ -20,6 +20,11 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   # will not take effect without FORCE
   # CMAKE_BINARY_DIR for use from FetchContent
   set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH "Install top-level directory" FORCE)
+endif()
+
+# allow CMAKE_PREFIX_PATH with ~ expand
+if(CMAKE_PREFIX_PATH)
+  get_filename_component(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ABSOLUTE)
 endif()
 
 # --- auto-ignore build directory

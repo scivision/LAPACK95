@@ -9,6 +9,7 @@ set(FETCHCONTENT_QUIET no)
 FetchContent_Declare(LAPACK95
 URL ${lapack95_url}
 INACTIVITY_TIMEOUT 60
+TLS_VERIFY true
 )
 
 FetchContent_Populate(LAPACK95)

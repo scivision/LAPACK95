@@ -27,3 +27,7 @@ jobs:
     - run: ctest --test-dir build --preset default
 
     - run: cmake --install build
+
+    - run: cmake -S EXAMPLES1 -B EXAMPLES1/build -DCMAKE_PREFIX_PATH=${{ runner.temp }}
+    - run: cmake --build EXAMPLES1/build
+    - run: ctest --test-dir EXAMPLES1/build -V

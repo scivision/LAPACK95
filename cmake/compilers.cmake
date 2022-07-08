@@ -1,5 +1,8 @@
-
-add_compile_options(
-"$<$<Fortran_COMPILER_ID:GNU>:-mtune=native>"
-"$<$<COMPILE_LANG_AND_ID:Fortran,GNU>:-fimplicit-none;-std=legacy;-fno-trapping-math>"
-)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+  add_compile_options(
+  "$<$<COMPILE_LANGUAGE:Fortran>:-fimplicit-none;-std=legacy;-fno-trapping-math>"
+  )
+  if(NOT CMAKE_CROSSCOMPILING)
+    add_compile_options(-mtune=native)
+  endif()
+endif()

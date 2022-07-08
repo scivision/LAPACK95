@@ -1,5 +1,6 @@
 {
   "lapack95": {
-    "url": "https://www.netlib.org/lapack95/lapack95.tgz"
+    "url": "https://www.netlib.org/lapack95/lapack95.tgz",
+    "sha256": "55711e5b1c5ddc9c7dd1d3ea15c37fc5b400783ac6ea573a75e2b1358c2c479b"
   }
 }

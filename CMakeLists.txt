@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.19...3.24)
 
-project(LAPACK
+project(lapack95
 LANGUAGES C Fortran
 VERSION 3.0
 )
