@@ -6,7 +6,7 @@ LANGUAGES C Fortran
 
 enable_testing()
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake/Modules)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake)
 
 find_package(LAPACK COMPONENTS LAPACK95 REQUIRED)
 

@@ -1,4 +1,4 @@
-message(STATUS "Lapack95 ${PROJECT_VERSION}  CMake ${CMAKE_VERSION}")
+message(STATUS "${PROJECT_NAME} ${PROJECT_VERSION}  CMake ${CMAKE_VERSION}")
 
 option(${PROJECT_NAME}_BUILD_TESTING "build tests" true)
 
@@ -6,7 +6,7 @@ set(CMAKE_TLS_VERIFY ON)
 
 set(FETCHCONTENT_UPDATES_DISCONNECTED true)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/Modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 # Rpath options necessary for shared library install to work correctly in user projects
 set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib)
